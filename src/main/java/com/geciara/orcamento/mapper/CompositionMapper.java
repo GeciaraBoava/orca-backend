@@ -4,12 +4,7 @@ import com.geciara.orcamento.dto.CompositionRequestDTO;
 import com.geciara.orcamento.dto.CompositionResponseDTO;
 import com.geciara.orcamento.dto.CompositionUpdateDTO;
 import com.geciara.orcamento.model.entitys.Composition;
-import com.geciara.orcamento.model.entitys.ItemType;
-import com.geciara.orcamento.model.entitys.Material;
-import com.geciara.orcamento.model.entitys.UnitMeasure;
 import org.springframework.stereotype.Component;
-
-import java.util.Map;
 
 @Component
 public class CompositionMapper {

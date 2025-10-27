@@ -1,7 +1,10 @@
 package com.geciara.orcamento.dto;
 
-import com.geciara.orcamento.model.enums.UserRole;
-import jakarta.validation.constraints.*;
+import com.geciara.orcamento.model.enums.EUserRole;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -30,9 +33,9 @@ public class UserRequestDTO {
 
     @NotBlank(message = "Estado é obrigatório")
     @Size(min = 2, max = 2, message = "Estado deve ter 2 caracteres")
-    private String UF;
+    private String uf;
 
     @NotNull(message = "Tipo de acesso é obrigatório")
-    private UserRole role;
+    private EUserRole role;
 
 }

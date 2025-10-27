@@ -1,9 +1,11 @@
 package com.geciara.orcamento.service;
 
-import com.geciara.orcamento.dto.*;
+import com.geciara.orcamento.dto.ItemTypeRequestDTO;
+import com.geciara.orcamento.dto.ItemTypeResponseDTO;
+import com.geciara.orcamento.dto.ItemTypeUpdateDTO;
 import com.geciara.orcamento.exceptions.ItemNotFoundException;
 import com.geciara.orcamento.mapper.ItemTypeMapper;
-import com.geciara.orcamento.model.entitys.ItemType;
+import com.geciara.orcamento.model.entitys.registerDetails.ItemType;
 import com.geciara.orcamento.repository.ItemTypeRepository;
 import org.springframework.stereotype.Service;
 

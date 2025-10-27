@@ -63,7 +63,7 @@ CREATE TABLE supplier (
     email VARCHAR(255) NOT NULL,
     address VARCHAR(255) NOT NULL,
     city VARCHAR(50) NOT NULL,
-    state VARCHAR(2) NOT NULL,
+    uf VARCHAR(2) NOT NULL,
     is_active BOOLEAN NOT NULL,
     registered_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP
@@ -92,7 +92,7 @@ CREATE TABLE users (
     email VARCHAR(255) NOT NULL,
     address VARCHAR(255) NOT NULL,
     city VARCHAR(50) NOT NULL,
-    state VARCHAR(2) NOT NULL,
+    uf VARCHAR(2) NOT NULL,
     is_active BOOLEAN NOT NULL,
     user_role VARCHAR(50) NOT NULL,
     registered_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,

@@ -14,7 +14,7 @@ public class MaterialResponseDTO {
     private String materialTypeDescription;
     private String unitMeasureDescription;
     private BigDecimal currentPrice;
-    private boolean isActive;
+    private boolean active;
 
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     private LocalDateTime registeredAt;

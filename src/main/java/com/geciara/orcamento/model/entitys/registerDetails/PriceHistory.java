@@ -1,9 +1,12 @@
-package com.geciara.orcamento.model.entitys.materialDetails;
+package com.geciara.orcamento.model.entitys.registerDetails;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.geciara.orcamento.model.entitys.Material;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -13,7 +16,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "price_history")
+@Table(name = "prices_histories")
 public class PriceHistory {
 
     @Id

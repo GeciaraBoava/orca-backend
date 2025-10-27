@@ -11,6 +11,6 @@ public class ItemTypeRequestDTO {
     @NotBlank(message = "Descrição é obrigatória")
     private String description;
 
-    private Boolean isActive;
+    private Boolean active;
 
 }

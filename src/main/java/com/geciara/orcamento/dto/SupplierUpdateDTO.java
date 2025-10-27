@@ -1,7 +1,9 @@
 package com.geciara.orcamento.dto;
 
-import com.geciara.orcamento.model.enums.CustomerType;
-import jakarta.validation.constraints.*;
+import com.geciara.orcamento.model.enums.ECustomerType;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
@@ -21,8 +23,8 @@ public class SupplierUpdateDTO {
     private String city;
 
     @Size(min = 2, max = 2, message = "Estado deve ter 2 caracteres")
-    private String state;
+    private String uf;
 
-    private CustomerType customerType;
-    private Boolean isActive;
+    private ECustomerType customerType;
+    private Boolean active;
 }

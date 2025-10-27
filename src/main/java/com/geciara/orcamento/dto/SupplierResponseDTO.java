@@ -1,7 +1,7 @@
 package com.geciara.orcamento.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.geciara.orcamento.model.enums.CustomerType;
+import com.geciara.orcamento.model.enums.ECustomerType;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -16,9 +16,9 @@ public class SupplierResponseDTO {
     private String email;
     private String address;
     private String city;
-    private String state;
-    private CustomerType customerType;
-    private boolean isActive;
+    private String uf;
+    private ECustomerType customerType;
+    private boolean active;
 
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     private LocalDateTime registeredAt;

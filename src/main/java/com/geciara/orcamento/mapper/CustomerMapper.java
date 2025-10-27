@@ -23,7 +23,7 @@ public class CustomerMapper {
         customer.getRegister().setEmail(dto.getEmail());
         customer.getRegister().setAddress(dto.getAddress());
         customer.getRegister().setCity(dto.getCity());
-        customer.getRegister().setUf(dto.getState());
+        customer.getRegister().setUf(dto.getUf());
         customer.setCustomerType(dto.getCustomerType());
         customer.setRegisteredAt(LocalDateTime.now());
         customer.setActive(true);
@@ -44,7 +44,7 @@ public class CustomerMapper {
         if(dto.getCity() != null) customer.getRegister().setCity(dto.getCity());
         if(dto.getUf() != null) customer.getRegister().setUf(dto.getUf());
         if(dto.getCustomerType() != null) customer.setCustomerType(dto.getCustomerType());
-        if(dto.getIsActive() != null) customer.setActive(dto.getIsActive());
+        if(dto.getActive() != null) customer.setActive(dto.getActive());
         customer.setUpdatedAt(LocalDateTime.now());
 
         return customer;
@@ -60,7 +60,7 @@ public class CustomerMapper {
         dto.setEmail(customer.getRegister().getEmail());
         dto.setAddress(customer.getRegister().getAddress());
         dto.setCity(customer.getRegister().getCity());
-        dto.setState(customer.getRegister().getUf());
+        dto.setUf(customer.getRegister().getUf());
         dto.setCustomerType(customer.getCustomerType());
         dto.setActive(customer.isActive());
         dto.setRegisteredAt(customer.getRegisteredAt());

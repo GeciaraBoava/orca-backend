@@ -1,6 +1,5 @@
-package com.geciara.orcamento.model.entitys;
+package com.geciara.orcamento.model.entitys.registerDetails;
 
-import com.geciara.orcamento.model.entitys.registerDetails.Register;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,19 +13,16 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "suppliers")
-public class Supplier {
+@Table(name = "materials_types")
+public class MaterialType {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "supplier_seq")
-    @SequenceGenerator(name = "supplier_seq", sequenceName = "supplier_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "material_type_seq")
+    @SequenceGenerator(name = "material_type_seq", sequenceName = "material_type_seq", allocationSize = 1)
     private Long id;
 
-    @Embedded
-    private Register register;
-
-    @Column(nullable = false)
-    private String contactName;
+    @Column(unique = true, nullable = false, length = 50)
+    private String description;
 
     @Column(nullable = false)
     private boolean active;
@@ -46,4 +42,7 @@ public class Supplier {
         updatedAt = LocalDateTime.now();
     }
 
+    public MaterialType(String description) {
+        this.description = description;
+    }
 }

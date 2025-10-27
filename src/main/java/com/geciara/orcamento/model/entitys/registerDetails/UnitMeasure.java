@@ -1,8 +1,11 @@
-package com.geciara.orcamento.model.entitys;
+package com.geciara.orcamento.model.entitys.registerDetails;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
@@ -11,7 +14,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "unit_measure")
+@Table(name = "units_measures")
 public class UnitMeasure {
 
     @Id
@@ -30,11 +33,11 @@ public class UnitMeasure {
     private LocalDateTime updatedAt;
 
     @Column(nullable = false)
-    private boolean isActive;
+    private boolean active;
 
 
-    public UnitMeasure(String descricao) {
-        this.description = descricao;
+    public UnitMeasure(String description) {
+        this.description = description;
     }
 
 }

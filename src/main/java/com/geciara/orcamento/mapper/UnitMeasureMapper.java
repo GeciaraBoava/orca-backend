@@ -3,7 +3,7 @@ package com.geciara.orcamento.mapper;
 import com.geciara.orcamento.dto.UnitMeasureRequestDTO;
 import com.geciara.orcamento.dto.UnitMeasureResponseDTO;
 import com.geciara.orcamento.dto.UnitMeasureUpdateDTO;
-import com.geciara.orcamento.model.entitys.UnitMeasure;
+import com.geciara.orcamento.model.entitys.registerDetails.UnitMeasure;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -30,7 +30,7 @@ public class UnitMeasureMapper {
         if (dto == null) return null;
 
         if(dto.getDescription() != null) unitMeasure.setDescription(dto.getDescription());
-        if(dto.getIsActive() != null) unitMeasure.setActive(dto.getIsActive());
+        if(dto.getActive() != null) unitMeasure.setActive(dto.getActive());
         unitMeasure.setUpdatedAt(LocalDateTime.now());
 
         return unitMeasure;

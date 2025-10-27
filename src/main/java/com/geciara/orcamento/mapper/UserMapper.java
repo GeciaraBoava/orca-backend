@@ -30,7 +30,7 @@ public class UserMapper {
         user.getRegister().setEmail(dto.getEmail());
         user.getRegister().setAddress(dto.getAddress());
         user.getRegister().setCity(dto.getCity());
-        user.getRegister().setUf(dto.getUF());
+        user.getRegister().setUf(dto.getUf());
         user.setRole(dto.getRole());
         user.setRegisteredAt(LocalDateTime.now());
         user.setActive(true);
@@ -51,9 +51,9 @@ public class UserMapper {
         if(dto.getEmail() != null) user.getRegister().setEmail(dto.getEmail());
         if(dto.getAddress() != null) user.getRegister().setAddress(dto.getAddress());
         if(dto.getCity() != null) user.getRegister().setCity(dto.getCity());
-        if(dto.getState() != null) user.getRegister().setUf(dto.getState());
+        if(dto.getUf() != null) user.getRegister().setUf(dto.getUf());
         if(dto.getRole() != null) user.setRole(dto.getRole());
-        if(dto.getIsActive() != null) user.setActive(dto.getIsActive());
+        if(dto.getActive() != null) user.setActive(dto.getActive());
         user.setUpdatedAt(LocalDateTime.now());
 
         return user;
@@ -69,7 +69,7 @@ public class UserMapper {
         dto.setEmail(user.getRegister().getEmail());
         dto.setAddress(user.getRegister().getAddress());
         dto.setCity(user.getRegister().getCity());
-        dto.setState(user.getRegister().getUf());
+        dto.setUf(user.getRegister().getUf());
         dto.setRole(user.getRole());
         dto.setActive(user.isActive());
         dto.setRegisteredAt(user.getRegisteredAt());

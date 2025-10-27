@@ -1,6 +1,5 @@
-package com.geciara.orcamento.model.entitys;
+package com.geciara.orcamento.model.entitys.registerDetails;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,7 +13,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "item_type")
+@Table(name = "items_types")
 public class ItemType {
 
     @Id
@@ -26,15 +25,22 @@ public class ItemType {
     private String description;
 
     @Column(nullable = false)
-    private boolean isActive;
+    private boolean active;
 
-    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     @Column(nullable = false, updatable = false)
-    protected LocalDateTime registeredAt;
+    private LocalDateTime registeredAt;
+    private LocalDateTime updatedAt;
 
-    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
-    protected LocalDateTime updatedAt;
+    @PrePersist
+    public void prePersist() {
+        registeredAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+    }
 
+    @PreUpdate
+    public void preUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
 
     public ItemType(String descricao) {
         this.description = descricao;

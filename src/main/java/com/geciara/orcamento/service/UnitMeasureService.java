@@ -5,7 +5,7 @@ import com.geciara.orcamento.dto.UnitMeasureResponseDTO;
 import com.geciara.orcamento.dto.UnitMeasureUpdateDTO;
 import com.geciara.orcamento.exceptions.ItemNotFoundException;
 import com.geciara.orcamento.mapper.UnitMeasureMapper;
-import com.geciara.orcamento.model.entitys.UnitMeasure;
+import com.geciara.orcamento.model.entitys.registerDetails.UnitMeasure;
 import com.geciara.orcamento.repository.UnitMeasureRepository;
 import org.springframework.stereotype.Service;
 

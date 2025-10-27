@@ -8,8 +8,7 @@ TODO
 
 - Conferir relações @OneToMany etc nas entityes
 - Calcular custo da composição com base nas quantidades e valores dos materiais (save e update)
-- Trocar 'state' por 'UF' em todos os locais
-
+- JsonFormat - tirar das entities e colocar nos DTOs
 
 OK Tela Login
 OK Menu lateral

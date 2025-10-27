@@ -6,8 +6,8 @@ import com.geciara.orcamento.dto.UserUpdateRequestDTO;
 import com.geciara.orcamento.exceptions.EmailAlreadyExistsException;
 import com.geciara.orcamento.exceptions.UserNotFoundException;
 import com.geciara.orcamento.mapper.UserMapper;
-import com.geciara.orcamento.model.entitys.Register;
 import com.geciara.orcamento.model.entitys.User;
+import com.geciara.orcamento.model.entitys.registerDetails.Register;
 import com.geciara.orcamento.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -20,7 +20,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-import static com.geciara.orcamento.model.enums.UserRole.ADMIN;
+import static com.geciara.orcamento.model.enums.EUserRole.ADMIN;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -140,7 +140,7 @@ public class UserServiceTest {
         assertEquals(responseDTO.getEmail(), result.getEmail());
         assertEquals(responseDTO.getAddress(), result.getAddress());
         assertEquals(responseDTO.getCity(), result.getCity());
-        assertEquals(responseDTO.getState(), result.getState());
+        assertEquals(responseDTO.getUf(), result.getUf());
         assertEquals(responseDTO.getRole(), result.getRole());
         assertEquals(responseDTO.isActive(), result.isActive());
         assertEquals(responseDTO.getRegisteredAt(), result.getRegisteredAt());
@@ -171,9 +171,9 @@ public class UserServiceTest {
                         updateRequestDTO.getEmail(),
                         updateRequestDTO.getAddress(),
                         updateRequestDTO.getCity(),
-                        updateRequestDTO.getState()
+                        updateRequestDTO.getUf()
                 ),
-                updateRequestDTO.getIsActive(),
+                updateRequestDTO.getActive(),
                 user.getRegisteredAt(),
                 fixedTime
         );
@@ -193,7 +193,7 @@ public class UserServiceTest {
         assertEquals(responseUpdateDTO.getEmail(), result.getEmail());
         assertEquals(responseUpdateDTO.getAddress(), result.getAddress()); // Agora esperando "Rua Ciclano de Tal"
         assertEquals(responseUpdateDTO.getCity(), result.getCity());
-        assertEquals(responseUpdateDTO.getState(), result.getState());
+        assertEquals(responseUpdateDTO.getUf(), result.getUf());
         assertEquals(responseUpdateDTO.getRole(), result.getRole());
         assertEquals(responseUpdateDTO.isActive(), result.isActive());
         assertEquals(responseUpdateDTO.getRegisteredAt(), result.getRegisteredAt());

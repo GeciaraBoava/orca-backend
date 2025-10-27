@@ -1,10 +1,7 @@
 package com.geciara.orcamento.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.*;
 import lombok.Data;
-
-import java.time.LocalDateTime;
 
 @Data
 public class SupplierRequestDTO {
@@ -30,6 +27,6 @@ public class SupplierRequestDTO {
 
     @NotBlank(message = "Estado é obrigatório")
     @Size(min = 2, max = 2, message = "Estado deve ter 2 caracteres")
-    private String state;
+    private String uf;
 
 }

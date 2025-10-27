@@ -10,5 +10,5 @@ public class MaterialTypeUpdateDTO {
     private Long id;
 
     private String description;
-    private Boolean isActive;
+    private Boolean active;
 }

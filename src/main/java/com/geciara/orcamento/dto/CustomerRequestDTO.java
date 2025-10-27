@@ -1,8 +1,10 @@
 package com.geciara.orcamento.dto;
 
-import com.geciara.orcamento.model.enums.CustomerType;
-import jakarta.validation.constraints.*;
-import lombok.Data;
+import com.geciara.orcamento.model.enums.ECustomerType;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -31,9 +33,9 @@ public class CustomerRequestDTO {
 
     @NotBlank(message = "Estado é obrigatório")
     @Size(min = 2, max = 2, message = "Estado deve ter 2 caracteres")
-    private String state;
+    private String uf;
 
     @NotNull(message = "Tipo de cliente é obrigatório")
-    private CustomerType customerType;
+    private ECustomerType customerType;
 
 }

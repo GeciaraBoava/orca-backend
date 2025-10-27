@@ -3,7 +3,7 @@ package com.geciara.orcamento.mapper;
 import com.geciara.orcamento.dto.MaterialTypeRequestDTO;
 import com.geciara.orcamento.dto.MaterialTypeResponseDTO;
 import com.geciara.orcamento.dto.MaterialTypeUpdateDTO;
-import com.geciara.orcamento.model.entitys.MaterialType;
+import com.geciara.orcamento.model.entitys.registerDetails.MaterialType;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -30,7 +30,7 @@ public class MaterialTypeMapper {
         if (dto == null) return null;
 
         if(dto.getDescription() != null) materialType.setDescription(dto.getDescription());
-        if(dto.getIsActive() != null) materialType.setActive(dto.getIsActive());
+        if(dto.getActive() != null) materialType.setActive(dto.getActive());
         materialType.setUpdatedAt(LocalDateTime.now());
 
         return materialType;

@@ -1,10 +1,12 @@
 package com.geciara.orcamento.model.entitys;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
-import com.geciara.orcamento.model.enums.CustomerType;
+import com.geciara.orcamento.model.entitys.registerDetails.Register;
+import com.geciara.orcamento.model.enums.ECustomerType;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
@@ -13,6 +15,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Embeddable
 @Table(name = "customer")
 public class Customer {
 
@@ -29,28 +32,23 @@ public class Customer {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private CustomerType customerType;
+    private ECustomerType customerType;
 
     @Column(nullable = false)
-    private boolean isActive;
+    private boolean active;
 
-    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     @Column(nullable = false, updatable = false)
     private LocalDateTime registeredAt;
-
-    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     private LocalDateTime updatedAt;
 
-    @Override
-    public String toString() {
-        return "Nome: " + register.getName() +
-                "\n Telefone: " +  register.getPhone() +
-                "\n Contato: " + contactName +
-                "\n E-mail: " + register.getEmail() + "\n" +
-                "\n Endereço: " + register.getAddress() + ", " + register.getCity() + "/" + register.getUf() +
-                "\n Situação: " + isActive +
-                "\n Tipo: " + customerType +
-                "\n Data de criação:  " + registeredAt + "\n" +
-                "\n Data de alteração" + updatedAt;
+    @PrePersist
+    public void prePersist() {
+        registeredAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        updatedAt = LocalDateTime.now();
     }
 }

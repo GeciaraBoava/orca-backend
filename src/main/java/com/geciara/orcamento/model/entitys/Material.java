@@ -1,10 +1,14 @@
 package com.geciara.orcamento.model.entitys;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.geciara.orcamento.exceptions.ItemNotFoundException;
-import com.geciara.orcamento.model.entitys.materialDetails.PriceHistory;
+import com.geciara.orcamento.model.entitys.registerDetails.MaterialType;
+import com.geciara.orcamento.model.entitys.registerDetails.PriceHistory;
+import com.geciara.orcamento.model.entitys.registerDetails.UnitMeasure;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -21,7 +25,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "material")
+@Table(name = "materials")
 public class Material {
 
     @Id
@@ -40,11 +44,20 @@ public class Material {
     @JoinColumn(name = "unit_measure_id", nullable = false)
     private UnitMeasure unitMeasure;
 
-    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
+    @Column(nullable = false, updatable = false)
     private LocalDateTime registeredAt;
-
-    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     private LocalDateTime updatedAt;
+
+    @PrePersist
+    public void prePersist() {
+        registeredAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
 
     @Column(name = "current_price")
     private BigDecimal currentPrice;
@@ -54,7 +67,8 @@ public class Material {
     private Set<PriceHistory> priceHistories = new HashSet<>();
 
     @Column(nullable = false)
-    private boolean isActive;
+    private boolean active;
+
 
     public Material(String description,
                     MaterialType materialType,
@@ -68,30 +82,24 @@ public class Material {
     }
 
     //buscar preço conforme data-base do orçamento
-    public BigDecimal getPriceByBaseData(LocalDate baseDate){
+    public BigDecimal getPrice(LocalDate baseDate) {
         LocalDateTime baseDateTime = baseDate.atTime(LocalTime.MAX);
 
-        //busca o preço criado até a data base
-        Optional<PriceHistory> priceUpToBaseDate = priceHistories.stream()
-                .filter(ph -> !ph.getRegisteredAt().isAfter(baseDateTime))
+        // 1️⃣ Busca o último preço até a data base
+        Optional<PriceHistory> lastPriceBeforeBaseDate = priceHistories.stream()
+                .filter(price -> !price.getRegisteredAt().isAfter(baseDateTime))
                 .max(Comparator.comparing(PriceHistory::getRegisteredAt));
 
-        if(priceUpToBaseDate.isPresent()) {
-            return priceUpToBaseDate.get().getPrice();
-        } else {
-            return  priceHistories.stream()
-                    .min(Comparator.comparingLong(
-                            ph -> ChronoUnit.DAYS.between(baseDateTime.toLocalDate(),
-                                    ph.getRegisteredAt().toLocalDate())))
-                    .map(PriceHistory::getPrice)
-                    .orElseThrow(() -> new ItemNotFoundException("Nenhum preço cadastrado"));
+        if (lastPriceBeforeBaseDate.isPresent()) {
+            return lastPriceBeforeBaseDate.get().getPrice();
         }
+
+        // 2️⃣ Se não houver, busca o preço mais próximo após a data base
+        return priceHistories.stream()
+                .min(Comparator.comparingLong(ph ->
+                        Math.abs(ChronoUnit.DAYS.between(baseDateTime.toLocalDate(), ph.getRegisteredAt().toLocalDate()))))
+                .map(PriceHistory::getPrice)
+                .orElseThrow(() -> new ItemNotFoundException("Nenhum preço cadastrado para o material."));
     }
 
-    @Override
-    public String toString() {
-        return "Descrição:" + description +
-                "\n Data do cadastro: " + registeredAt +
-                "\n Preço: " + priceHistories;
-    }
 }

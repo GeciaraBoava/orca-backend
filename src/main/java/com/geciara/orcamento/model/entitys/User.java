@@ -1,9 +1,12 @@
 package com.geciara.orcamento.model.entitys;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.geciara.orcamento.model.enums.UserRole;
+import com.geciara.orcamento.model.entitys.registerDetails.Register;
+import com.geciara.orcamento.model.enums.EUserRole;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -34,85 +37,50 @@ public class User implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private UserRole role;
+    private EUserRole role;
 
     @Embedded
     private Register register;
 
     @Column(nullable = false)
-    private boolean isActive;
+    private boolean active;
 
-    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     @Column(nullable = false, updatable = false)
     private LocalDateTime registeredAt;
 
-    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     private LocalDateTime updatedAt;
 
-    @Override
-    public String toString() {
-        return "Nome: " + getRegister().getName() +
-                "\nLogin: " + username +
-                "\nTipo de acesso: " + role +
-                "\nTelefone: " +  getRegister().getPhone() +
-                "\nE-mail: " + getRegister().getEmail() +
-                "\nEndereço: " + getRegister().getAddress() + ", " + getRegister().getCity() + "/" + getRegister().getUf() +
-                "\nSituação: " + isActive +
-                "\nData de criação:  " + registeredAt +
-                "\nData de alteração" + updatedAt;
+    @PrePersist
+    public void prePersist() {
+        registeredAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
     }
 
-    //CONFIGURAÇÕES DE SEGURANÇA'
+    @PreUpdate
+    public void preUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
 
+    //CONFIGURAÇÕES DE SEGURANÇA
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if (role == UserRole.ADMIN) {
-            return List.of(
+        return switch (role) {
+            case ADMIN -> List.of(
                     new SimpleGrantedAuthority("ROLE_ADMIN"),
                     new SimpleGrantedAuthority("ROLE_MANAGER"),
                     new SimpleGrantedAuthority("ROLE_BUDGET")
             );
-        } else if (role == UserRole.MANAGER) {
-            return List.of(
+            case MANAGER -> List.of(
                     new SimpleGrantedAuthority("ROLE_MANAGER"),
                     new SimpleGrantedAuthority("ROLE_BUDGET")
             );
-        } else {
-            return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
-        }
-    }
-
-    @Override
-    public String getUsername() {
-        return username;
-    }
-
-    @Override
-    public String getPassword() {
-        return password;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        //return UserDetails.super.isAccountNonExpired();
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        //return UserDetails.super.isAccountNonLocked();
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        //return UserDetails.super.isCredentialsNonExpired();
-        return true;
+            default -> List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
+        };
     }
 
     @Override
     public boolean isEnabled() {
-        return isActive;
+        return active;
     }
 }

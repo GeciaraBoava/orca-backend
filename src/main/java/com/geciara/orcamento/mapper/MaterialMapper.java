@@ -5,9 +5,9 @@ import com.geciara.orcamento.dto.MaterialResponseDTO;
 import com.geciara.orcamento.dto.MaterialUpdateDTO;
 import com.geciara.orcamento.exceptions.ItemNotFoundException;
 import com.geciara.orcamento.model.entitys.Material;
-import com.geciara.orcamento.model.entitys.MaterialType;
-import com.geciara.orcamento.model.entitys.materialDetails.PriceHistory;
-import com.geciara.orcamento.model.entitys.UnitMeasure;
+import com.geciara.orcamento.model.entitys.registerDetails.MaterialType;
+import com.geciara.orcamento.model.entitys.registerDetails.PriceHistory;
+import com.geciara.orcamento.model.entitys.registerDetails.UnitMeasure;
 import com.geciara.orcamento.repository.MaterialTypeRepository;
 import com.geciara.orcamento.repository.UnitMeasureRepository;
 import org.springframework.stereotype.Component;
@@ -63,7 +63,7 @@ public class MaterialMapper {
         if (dto == null) return null;
 
         if(dto.getDescription() != null) material.setDescription(dto.getDescription());
-        if(dto.getIsActive() != null) material.setActive(dto.getIsActive());
+        if(dto.getActive() != null) material.setActive(dto.getActive());
         material.setUpdatedAt(LocalDateTime.now());
 
         if(dto.getMaterialTypeDescription() != null) {

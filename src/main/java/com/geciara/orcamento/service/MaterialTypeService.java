@@ -5,7 +5,7 @@ import com.geciara.orcamento.dto.MaterialTypeResponseDTO;
 import com.geciara.orcamento.dto.MaterialTypeUpdateDTO;
 import com.geciara.orcamento.exceptions.ItemNotFoundException;
 import com.geciara.orcamento.mapper.MaterialTypeMapper;
-import com.geciara.orcamento.model.entitys.MaterialType;
+import com.geciara.orcamento.model.entitys.registerDetails.MaterialType;
 import com.geciara.orcamento.repository.MaterialTypeRepository;
 import org.springframework.stereotype.Service;
 

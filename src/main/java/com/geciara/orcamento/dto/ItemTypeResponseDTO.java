@@ -11,7 +11,7 @@ public class ItemTypeResponseDTO {
 
     private Long id;
     private String description;
-    private boolean isActive;
+    private boolean active;
     private LocalDateTime registeredAt;
     private LocalDateTime updatedAt;
 

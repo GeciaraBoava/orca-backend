@@ -1,17 +1,25 @@
 package com.geciara.orcamento.model.entitys;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.geciara.orcamento.model.entitys.registerDetails.MaterialType;
+import com.geciara.orcamento.model.entitys.registerDetails.UnitMeasure;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+@Table(name = "products")
 public class Product {
 
     @Id
@@ -30,16 +38,23 @@ public class Product {
     @JoinColumn(name = "unit_measure_id", nullable = false)
     private UnitMeasure unitMeasure;
 
-    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
+    @Column(nullable = false, updatable = false)
     private LocalDateTime registeredAt;
-
-    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     private LocalDateTime updatedAt;
 
-    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
+    @PrePersist
+    public void prePersist() {
+        registeredAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
+
     private LocalDate date;
 
-    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     @Column(name = "reference_date", nullable = false)
     private LocalDate referenceDate;
 
@@ -48,4 +63,10 @@ public class Product {
 
     @Column(nullable = false)
     private BigDecimal cost;
+
+    public BigDecimal getCost(LocalDate baseDate) {
+        return compositionList.stream()
+                .map(mc -> Optional.ofNullable(mc.getCost(baseDate)).orElse(BigDecimal.ZERO))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
 }

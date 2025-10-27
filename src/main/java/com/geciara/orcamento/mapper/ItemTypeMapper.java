@@ -3,7 +3,7 @@ package com.geciara.orcamento.mapper;
 import com.geciara.orcamento.dto.ItemTypeRequestDTO;
 import com.geciara.orcamento.dto.ItemTypeResponseDTO;
 import com.geciara.orcamento.dto.ItemTypeUpdateDTO;
-import com.geciara.orcamento.model.entitys.ItemType;
+import com.geciara.orcamento.model.entitys.registerDetails.ItemType;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;

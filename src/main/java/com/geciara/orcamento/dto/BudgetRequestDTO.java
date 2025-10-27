@@ -1,9 +1,9 @@
 package com.geciara.orcamento.dto;
 
-import com.geciara.orcamento.model.entitys.budgetDetails.Freight;
-import com.geciara.orcamento.model.entitys.budgetDetails.Installation;
-import com.geciara.orcamento.model.entitys.budgetDetails.Management;
-import com.geciara.orcamento.model.entitys.budgetDetails.Taxes;
+import com.geciara.orcamento.model.entitys.costDetails.Freight;
+import com.geciara.orcamento.model.entitys.costDetails.Installation;
+import com.geciara.orcamento.model.entitys.costDetails.Management;
+import com.geciara.orcamento.model.entitys.costDetails.Taxes;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;

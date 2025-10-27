@@ -1,7 +1,11 @@
 package com.geciara.orcamento.mapper;
 
-import com.geciara.orcamento.dto.*;
-import com.geciara.orcamento.model.entitys.*;
+import com.geciara.orcamento.dto.BudgetRequestDTO;
+import com.geciara.orcamento.dto.BudgetResponseDTO;
+import com.geciara.orcamento.dto.BudgetUpdateDTO;
+import com.geciara.orcamento.model.entitys.Budget;
+import com.geciara.orcamento.model.entitys.Customer;
+import com.geciara.orcamento.model.entitys.Product;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
@@ -87,7 +91,7 @@ public class BudgetMapper {
         dto.setInstallation(budget.getInstallation());
         dto.setManagement(budget.getManagement());
         dto.setFixedExpenses(budget.getFixedExpenses());
-        dto.setTotal(budget.getTotal());
+        dto.setTotal(budget.getTotalCost());
 
         return dto;
     }

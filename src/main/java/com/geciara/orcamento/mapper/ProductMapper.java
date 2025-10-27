@@ -1,10 +1,12 @@
 package com.geciara.orcamento.mapper;
 
-import com.geciara.orcamento.dto.*;
+import com.geciara.orcamento.dto.ProductRequestDTO;
+import com.geciara.orcamento.dto.ProductResponseDTO;
+import com.geciara.orcamento.dto.ProductUpdateDTO;
 import com.geciara.orcamento.model.entitys.Composition;
-import com.geciara.orcamento.model.entitys.MaterialType;
 import com.geciara.orcamento.model.entitys.Product;
-import com.geciara.orcamento.model.entitys.UnitMeasure;
+import com.geciara.orcamento.model.entitys.registerDetails.MaterialType;
+import com.geciara.orcamento.model.entitys.registerDetails.UnitMeasure;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.stereotype.Component;

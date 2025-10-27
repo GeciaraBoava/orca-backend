@@ -1,9 +1,14 @@
 package com.geciara.orcamento.service;
 
-import com.geciara.orcamento.dto.*;
+import com.geciara.orcamento.dto.ProductRequestDTO;
+import com.geciara.orcamento.dto.ProductResponseDTO;
+import com.geciara.orcamento.dto.ProductUpdateDTO;
 import com.geciara.orcamento.exceptions.ItemNotFoundException;
 import com.geciara.orcamento.mapper.ProductMapper;
-import com.geciara.orcamento.model.entitys.*;
+import com.geciara.orcamento.model.entitys.Composition;
+import com.geciara.orcamento.model.entitys.Product;
+import com.geciara.orcamento.model.entitys.registerDetails.MaterialType;
+import com.geciara.orcamento.model.entitys.registerDetails.UnitMeasure;
 import com.geciara.orcamento.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 

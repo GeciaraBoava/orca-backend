@@ -1,11 +1,9 @@
 package com.geciara.orcamento.model.enums;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 
-@Getter
 @AllArgsConstructor
-public enum CustomerType {
+public enum ECustomerType {
     PUBLIC("Público"),
     CORPORATIVE("Corporativo"),
     PRIVATE("Particular");

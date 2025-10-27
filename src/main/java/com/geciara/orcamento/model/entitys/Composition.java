@@ -1,6 +1,7 @@
 package com.geciara.orcamento.model.entitys;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.geciara.orcamento.model.entitys.registerDetails.ItemType;
+import com.geciara.orcamento.model.entitys.registerDetails.UnitMeasure;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,10 +9,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 
 
 @Getter
@@ -23,8 +25,8 @@ import java.util.Map;
 public class Composition {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "material_seq")
-    @SequenceGenerator(name = "material_seq", sequenceName = "material_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "composition_seq")
+    @SequenceGenerator(name = "composition_seq", sequenceName = "composition_seq", allocationSize = 1)
     private Long id;
 
     @Column(nullable = false, length = 255, unique = true)
@@ -38,14 +40,31 @@ public class Composition {
     @JoinColumn(name = "unit_measure_id", nullable = false)
     private UnitMeasure unitMeasure;
 
-    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
+    @Column(nullable = false, updatable = false)
     private LocalDateTime registeredAt;
-
-    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "compositions", cascade = CascadeType.ALL, orphanRemoval = true)
+    @PrePersist
+    public void prePersist() {
+        registeredAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
+
+    @OneToMany(mappedBy = "composition", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MaterialComposition> materialComposition = new ArrayList<>();
 
     private BigDecimal cost;
+
+    public BigDecimal getCost(LocalDate baseDate) {
+        return materialComposition.stream()
+                .map(mc -> Optional.ofNullable(mc.getCost(baseDate)).orElse(BigDecimal.ZERO))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+
 }

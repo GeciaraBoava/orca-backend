@@ -15,6 +15,6 @@ public class MaterialUpdateDTO {
     private String materialTypeDescription;
     private String unitMeasureDescription;
     private BigDecimal currentPrice;
-    private Boolean isActive;
+    private Boolean active;
 
 }
