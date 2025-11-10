@@ -6,93 +6,95 @@ import com.geciara.orcamento.dto.BudgetUpdateDTO;
 import com.geciara.orcamento.model.entitys.Budget;
 import com.geciara.orcamento.model.entitys.Customer;
 import com.geciara.orcamento.model.entitys.Product;
-import lombok.Getter;
-import lombok.Setter;
+import com.geciara.orcamento.service.CustomerService;
+import com.geciara.orcamento.service.ProductService;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Getter
-@Setter
 @Component
 public class BudgetMapper {
 
-    private final CustomerMapper customerMapper;
-    private final ProductMapper productMapper;
+    private final CustomerService customerService;
+    private final ProductService productService;
 
-    public BudgetMapper(CustomerMapper customerMapper, ProductMapper productMapper) {
-        this.customerMapper = customerMapper;
-        this.productMapper = productMapper;
+    public BudgetMapper(CustomerService customerService, ProductService productService) {
+        this.customerService = customerService;
+        this.productService = productService;
     }
 
-    public Budget toEntity(
-            BudgetRequestDTO dto,
-            Customer customer,
-            List<Product> productList
-    ) {
-
-        if (dto == null) return null;
-
+    public Budget toEntity(BudgetRequestDTO dto) {
         Budget budget = new Budget();
-
         budget.setDate(dto.getDate());
         budget.setDateReference(dto.getDateReference());
+
+        Customer customer = customerService.findEntityById(dto.getCustomerId());
         budget.setCustomer(customer);
-        budget.setProduct(productList);
+
+        List<Product> products = dto.getProductIds().stream()
+                .map(productService::findProductById)
+                .collect(Collectors.toList());
+        budget.setProducts(products);
+
         budget.setTaxes(dto.getTaxes());
-        budget.setFreight(dto.getFreight());
-        budget.setInstallation(dto.getInstallation());
-        budget.setManagement(dto.getManagement());
-        budget.setFixedExpenses(dto.getFixedExpenses());
 
-        return budget;
-    }
+        // Atualiza custo e preço de cada produto
+        products.forEach(p -> p.updateCostAndPrice(budget, dto.getDate()));
 
-    public Budget updateFromDTO(
-            BudgetUpdateDTO dto,
-            Budget budget,
-            Customer customer,
-            List<Product> productList
-    ) {
-        if (dto == null) return null;
-
-        budget.setDate(dto.getDate());
-        budget.setDateReference(dto.getDateReference());
-        budget.setCustomer(customer);
-        budget.setProduct(productList);
-        budget.setTaxes(dto.getTaxes());
-        budget.setFreight(dto.getFreight());
-        budget.setInstallation(dto.getInstallation());
-        budget.setManagement(dto.getManagement());
-        budget.setFixedExpenses(dto.getFixedExpenses());
+        // Atualiza total do orçamento
+        budget.setTotalCost(products.stream()
+                .map(Product::getCost)
+                .reduce(java.math.BigDecimal.ZERO, java.math.BigDecimal::add));
+        budget.setTotalPrice(products.stream()
+                .map(Product::getPrice)
+                .reduce(java.math.BigDecimal.ZERO, java.math.BigDecimal::add));
 
         return budget;
     }
 
     public BudgetResponseDTO toResponseDTO(Budget budget) {
-
-        if (budget == null) return null;
-
         BudgetResponseDTO dto = new BudgetResponseDTO();
-
         dto.setId(budget.getId());
         dto.setDate(budget.getDate());
         dto.setDateReference(budget.getDateReference());
-        dto.setCustomer(customerMapper.toResponseDTO(budget.getCustomer()));
-        dto.setProducts(
-                budget.getProduct()
-                        .stream()
-                        .map(productMapper::toResponseDTO)
-                        .collect(Collectors.toList()));
-
+        dto.setCustomerId(budget.getCustomer().getId());
+        dto.setProducts(budget.getProducts());
         dto.setTaxes(budget.getTaxes());
-        dto.setFreight(budget.getFreight());
-        dto.setInstallation(budget.getInstallation());
-        dto.setManagement(budget.getManagement());
-        dto.setFixedExpenses(budget.getFixedExpenses());
-        dto.setTotal(budget.getTotalCost());
-
+        dto.setTotalCost(budget.getTotalCost());
+        dto.setTotalPrice(budget.getTotalPrice());
+        dto.setActive(budget.isActive());
+        dto.setStatus(budget.getStatus());
+        dto.setRegisteredAt(budget.getRegisteredAt());
+        dto.setUpdatedAt(budget.getUpdatedAt());
         return dto;
+    }
+
+    public Budget updateFromDTO(BudgetUpdateDTO dto, Budget budget) {
+        if (dto.getDate() != null) budget.setDate(dto.getDate());
+        if (dto.getDateReference() != null) budget.setDateReference(dto.getDateReference());
+        if (dto.getTaxes() != null) budget.setTaxes(dto.getTaxes());
+        if (dto.getStatus() != null) budget.setStatus(dto.getStatus());
+        if (dto.getActive() != null) budget.setActive(dto.getActive());
+
+        if (dto.getProductIds() != null && !dto.getProductIds().isEmpty()) {
+            List<Product> products = dto.getProductIds().stream()
+                    .map(productService::findProductById)
+                    .collect(Collectors.toList());
+            budget.setProducts(products);
+        }
+
+        // Atualiza custo e preço de cada produto
+        budget.getProducts().forEach(p -> p.updateCostAndPrice(budget, budget.getDate()));
+
+        // Atualiza total do orçamento
+        budget.setTotalCost(budget.getProducts().stream()
+                .map(Product::getCost)
+                .reduce(java.math.BigDecimal.ZERO, java.math.BigDecimal::add));
+        budget.setTotalPrice(budget.getProducts().stream()
+                .map(Product::getPrice)
+                .reduce(java.math.BigDecimal.ZERO, java.math.BigDecimal::add));
+
+        return budget;
     }
 }

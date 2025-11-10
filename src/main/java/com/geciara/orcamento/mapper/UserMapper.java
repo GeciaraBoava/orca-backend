@@ -4,73 +4,45 @@ import com.geciara.orcamento.dto.UserRequestDTO;
 import com.geciara.orcamento.dto.UserResponseDTO;
 import com.geciara.orcamento.dto.UserUpdateRequestDTO;
 import com.geciara.orcamento.model.entitys.User;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import com.geciara.orcamento.model.entitys.registerDetails.Register;
+import com.geciara.orcamento.model.enums.EUserRole;
 import org.springframework.stereotype.Component;
-
-import java.time.LocalDateTime;
 
 @Component
 public class UserMapper {
 
-    private final BCryptPasswordEncoder passwordEncoder;
-
-    public UserMapper(BCryptPasswordEncoder passwordEncoder) {
-        this.passwordEncoder = passwordEncoder;
-    }
-
     public User toEntity(UserRequestDTO dto) {
-
-        if (dto == null) return null;
-
         User user = new User();
+        user.setUsername(dto.getUsername());
+        user.setRole(EUserRole.valueOf(dto.getRole()));
 
-        user.getRegister().setName(dto.getName());
-        user.setUsername(dto.getLogin());
-        user.getRegister().setPhone(dto.getPhone());
-        user.getRegister().setEmail(dto.getEmail());
-        user.getRegister().setAddress(dto.getAddress());
-        user.getRegister().setCity(dto.getCity());
-        user.getRegister().setUf(dto.getUf());
-        user.setRole(dto.getRole());
-        user.setRegisteredAt(LocalDateTime.now());
-        user.setActive(true);
-        user.setPassword(passwordEncoder.encode("123456")); //senha padrão a ser alterada pelo 'user'
-
-        return user;
-    }
-
-    public User updateFromDTO(UserUpdateRequestDTO dto,
-                              User user) {
-
-        if (dto == null) return null;
-
-        if(dto.getName() != null) user.getRegister().setName(dto.getName());
-        if(dto.getLogin() != null) user.setUsername(dto.getLogin());
-        if(dto.getPassword() != null) user.setPassword(passwordEncoder.encode(dto.getPassword()));
-        if(dto.getPhone() != null) user.getRegister().setPhone(dto.getPhone());
-        if(dto.getEmail() != null) user.getRegister().setEmail(dto.getEmail());
-        if(dto.getAddress() != null) user.getRegister().setAddress(dto.getAddress());
-        if(dto.getCity() != null) user.getRegister().setCity(dto.getCity());
-        if(dto.getUf() != null) user.getRegister().setUf(dto.getUf());
-        if(dto.getRole() != null) user.setRole(dto.getRole());
-        if(dto.getActive() != null) user.setActive(dto.getActive());
-        user.setUpdatedAt(LocalDateTime.now());
+        Register register = new Register();
+        register.setName(dto.getName());
+        register.setPhone(dto.getPhone());
+        register.setEmail(dto.getEmail());
+        register.setAddress(dto.getAddress());
+        register.setCity(dto.getCity());
+        register.setUf(dto.getUf());
+        user.setRegister(register);
 
         return user;
     }
 
     public UserResponseDTO toResponseDTO(User user) {
         UserResponseDTO dto = new UserResponseDTO();
-
         dto.setId(user.getId());
-        dto.setName(user.getRegister().getName());
-        dto.setLogin(user.getUsername());
-        dto.setPhone(user.getRegister().getPhone());
-        dto.setEmail(user.getRegister().getEmail());
-        dto.setAddress(user.getRegister().getAddress());
-        dto.setCity(user.getRegister().getCity());
-        dto.setUf(user.getRegister().getUf());
+        dto.setUsername(user.getUsername());
         dto.setRole(user.getRole());
+
+        if (user.getRegister() != null) {
+            dto.setName(user.getRegister().getName());
+            dto.setPhone(user.getRegister().getPhone());
+            dto.setEmail(user.getRegister().getEmail());
+            dto.setAddress(user.getRegister().getAddress());
+            dto.setCity(user.getRegister().getCity());
+            dto.setUf(user.getRegister().getUf());
+        }
+
         dto.setActive(user.isActive());
         dto.setRegisteredAt(user.getRegisteredAt());
         dto.setUpdatedAt(user.getUpdatedAt());
@@ -78,4 +50,23 @@ public class UserMapper {
         return dto;
     }
 
+    public User updateFromDTO(UserUpdateRequestDTO dto, User user) {
+        if (dto.getUsername() != null) user.setUsername(dto.getUsername());
+        if (dto.getRole() != null) user.setRole(EUserRole.valueOf(dto.getRole()));
+
+        Register register = user.getRegister();
+        if (register == null) {
+            register = new Register();
+            user.setRegister(register);
+        }
+
+        if (dto.getName() != null) register.setName(dto.getName());
+        if (dto.getPhone() != null) register.setPhone(dto.getPhone());
+        if (dto.getEmail() != null) register.setEmail(dto.getEmail());
+        if (dto.getAddress() != null) register.setAddress(dto.getAddress());
+        if (dto.getCity() != null) register.setCity(dto.getCity());
+        if (dto.getUf() != null) register.setUf(dto.getUf());
+
+        return user;
+    }
 }

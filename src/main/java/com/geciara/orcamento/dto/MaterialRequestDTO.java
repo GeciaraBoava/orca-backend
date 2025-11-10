@@ -1,6 +1,7 @@
 package com.geciara.orcamento.dto;
 
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -8,16 +9,17 @@ import java.math.BigDecimal;
 @Data
 public class MaterialRequestDTO {
 
-    @NotBlank(message = "Nome é obrigatório")
+    @NotBlank(message = "Descrição é obrigatória")
     private String description;
 
-    @NotBlank(message = "Tipo de material é obrigatório")
-    private String materialTypeDescription;
+    @NotNull(message = "Tipo do material é obrigatório")
+    private Long materialTypeId;
 
-    @NotBlank(message = "Unidade de medida é obrigatório")
-    private String unitMeasureDescription;
+    @NotNull(message = "Unidade de medida é obrigatória")
+    private Long unitMeasureId;
 
     @NotNull(message = "Preço atual é obrigatório")
     private BigDecimal currentPrice;
 
+    private boolean active = true;
 }

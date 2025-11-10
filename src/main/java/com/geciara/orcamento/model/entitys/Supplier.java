@@ -29,20 +29,23 @@ public class Supplier {
     private String contactName;
 
     @Column(nullable = false)
-    private boolean active;
+    private boolean active = true;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime registeredAt;
     private LocalDateTime updatedAt;
 
     @PrePersist
-    public void prePersist() {
+    public void onCreate() {
         registeredAt = LocalDateTime.now();
         updatedAt = LocalDateTime.now();
+        if (register == null) {
+            register = new Register();
+        }
     }
 
     @PreUpdate
-    public void preUpdate() {
+    public void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
 

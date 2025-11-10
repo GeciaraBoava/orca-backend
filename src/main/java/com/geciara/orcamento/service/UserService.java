@@ -11,9 +11,9 @@ import com.geciara.orcamento.model.entitys.User;
 import com.geciara.orcamento.repository.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-
 
 @Service
 public class UserService {
@@ -28,15 +28,20 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    @Transactional
     public UserResponseDTO save(UserRequestDTO dto) {
-        if (userRepository.existsByCadastroEmail(dto.getEmail())) {
-            throw new EmailAlreadyExistsException("Email já está em uso.");
+        if (userRepository.existsByRegisterEmail(dto.getEmail())) {
+            throw new EmailAlreadyExistsException("E-mail já está em uso.");
         }
+
         User user = userMapper.toEntity(dto);
-        user = userRepository.save(user);
-        return userMapper.toResponseDTO(user);
+        user.setPassword(passwordEncoder.encode(dto.getPassword()));
+
+        User savedUser = userRepository.save(user);
+        return userMapper.toResponseDTO(savedUser);
     }
 
+    @Transactional(readOnly = true)
     public List<UserResponseDTO> listAll() {
         return userRepository.findAll()
                 .stream()
@@ -44,33 +49,40 @@ public class UserService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     public UserResponseDTO findById(Long id) {
         User user = userRepository.findById(id)
-                .orElseThrow(ItemNotFoundException::new);
+                .orElseThrow(() -> new ItemNotFoundException("Usuário não encontrado."));
         return userMapper.toResponseDTO(user);
     }
 
+    @Transactional
     public UserResponseDTO update(Long id, UserUpdateRequestDTO dto) {
         User user = userRepository.findById(id)
-                .orElseThrow(UserNotFoundException::new);
+                .orElseThrow(() -> new UserNotFoundException("Usuário não encontrado."));
+
         User updatedUser = userMapper.updateFromDTO(dto, user);
+        if (dto.getPassword() != null && !dto.getPassword().isBlank()) {
+            updatedUser.setPassword(passwordEncoder.encode(dto.getPassword()));
+        }
+
         userRepository.save(updatedUser);
         return userMapper.toResponseDTO(updatedUser);
     }
 
+    @Transactional
     public void delete(Long id) {
         if (!userRepository.existsById(id)) {
-            throw new ItemNotFoundException();
+            throw new ItemNotFoundException("Usuário não encontrado.");
         }
         userRepository.deleteById(id);
     }
 
-    public void updatePassword(Long id, String novaSenha) {
+    @Transactional
+    public void updatePassword(Long id, String newPassword) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new ItemNotFoundException("Usuário não encontrado"));
-        user.setPassword(passwordEncoder.encode(novaSenha));
+                .orElseThrow(() -> new UserNotFoundException("Usuário não encontrado."));
+        user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
     }
-
-
 }

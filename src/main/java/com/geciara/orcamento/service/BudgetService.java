@@ -6,77 +6,72 @@ import com.geciara.orcamento.dto.BudgetUpdateDTO;
 import com.geciara.orcamento.exceptions.ItemNotFoundException;
 import com.geciara.orcamento.mapper.BudgetMapper;
 import com.geciara.orcamento.model.entitys.Budget;
-import com.geciara.orcamento.model.entitys.Customer;
-import com.geciara.orcamento.model.entitys.Product;
 import com.geciara.orcamento.repository.BudgetRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class BudgetService {
 
     private final BudgetRepository budgetRepository;
     private final BudgetMapper budgetMapper;
-    private final CustomerService customerService;
-    private final ProductService productService;
 
-    public BudgetService(BudgetRepository budgetRepository,
-                         BudgetMapper budgetMapper,
-                         CustomerService customerService,
-                         ProductService productService
-    ) {
+    public BudgetService(BudgetRepository budgetRepository, BudgetMapper budgetMapper) {
         this.budgetRepository = budgetRepository;
         this.budgetMapper = budgetMapper;
-        this.customerService = customerService;
-        this.productService = productService;
     }
 
+    @Transactional
     public BudgetResponseDTO save(BudgetRequestDTO dto) {
-        Customer customer = customerService.findCustomerById(dto.getCustomerId());
-        List<Product> productList = dto.getProductIds()
-                .stream()
-                .map(productService::findProductById)
-                .toList();
+        Budget budget = budgetMapper.toEntity(dto);
 
-        Budget budget = budgetMapper.toEntity(dto, customer, productList);
+        // Salva orçamento e retorna DTO
         budget = budgetRepository.save(budget);
-
         return budgetMapper.toResponseDTO(budget);
     }
 
+    @Transactional(readOnly = true)
     public List<BudgetResponseDTO> listAll() {
         return budgetRepository.findAll()
                 .stream()
                 .map(budgetMapper::toResponseDTO)
-                .toList();
+                .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public BudgetResponseDTO findById(Long id) {
         Budget budget = budgetRepository.findById(id)
-                .orElseThrow(ItemNotFoundException::new);
+                .orElseThrow(() -> new ItemNotFoundException("Orçamento não encontrado"));
         return budgetMapper.toResponseDTO(budget);
     }
 
-    public BudgetResponseDTO update(Long id, BudgetUpdateDTO dto) {
-        Customer customer = customerService.findCustomerById(dto.getCustomerId());
-        List<Product> productList = dto.getProductIds()
-                .stream()
-                .map(productService::findProductById)
-                .toList();
+    @Transactional(readOnly = true)
+    public Budget findEntityById(Long id) {
+        return budgetRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Budget not found: " + id));
+    }
 
+    @Transactional
+    public BudgetResponseDTO update(Long id, BudgetUpdateDTO dto) {
         Budget budget = budgetRepository.findById(id)
-                .orElseThrow(ItemNotFoundException::new);
-        Budget updatedBudget = budgetMapper.updateFromDTO(dto, budget, customer, productList);
-        budgetRepository.save(updatedBudget);
+                .orElseThrow(() -> new ItemNotFoundException("Orçamento não encontrado"));
+
+        Budget updatedBudget = budgetMapper.updateFromDTO(dto, budget);
+
+        // Salva orçamento atualizado
+        updatedBudget = budgetRepository.save(updatedBudget);
         return budgetMapper.toResponseDTO(updatedBudget);
     }
 
+    @Transactional
     public void delete(Long id) {
         if (!budgetRepository.existsById(id)) {
-            throw new ItemNotFoundException();
+            throw new ItemNotFoundException("Orçamento não encontrado");
         }
         budgetRepository.deleteById(id);
     }
-
 }

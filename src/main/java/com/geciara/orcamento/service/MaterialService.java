@@ -8,9 +8,9 @@ import com.geciara.orcamento.mapper.MaterialMapper;
 import com.geciara.orcamento.model.entitys.Material;
 import com.geciara.orcamento.repository.MaterialRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-
 
 @Service
 public class MaterialService {
@@ -23,12 +23,14 @@ public class MaterialService {
         this.materialMapper = materialMapper;
     }
 
+    @Transactional
     public MaterialResponseDTO save(MaterialRequestDTO dto) {
         Material material = materialMapper.toEntity(dto);
-        material = materialRepository.save(material);
-        return materialMapper.toResponseDTO(material);
+        Material saved = materialRepository.save(material);
+        return materialMapper.toResponseDTO(saved);
     }
 
+    @Transactional(readOnly = true)
     public List<MaterialResponseDTO> listAll() {
         return materialRepository.findAll()
                 .stream()
@@ -36,32 +38,33 @@ public class MaterialService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     public MaterialResponseDTO findById(Long id) {
         Material material = materialRepository.findById(id)
-                .orElseThrow(ItemNotFoundException::new);
+                .orElseThrow(() -> new ItemNotFoundException("Material não encontrado"));
         return materialMapper.toResponseDTO(material);
     }
 
-    public Material findMaterialById(Long id) {
-        return materialRepository.findById(id)
-                .orElseThrow(ItemNotFoundException::new);
-    }
-
+    @Transactional
     public MaterialResponseDTO update(Long id, MaterialUpdateDTO dto) {
         Material material = materialRepository.findById(id)
-                .orElseThrow(ItemNotFoundException::new);
-        Material updatedMaterial = materialMapper.updateFromDTO(dto, material);
-        materialRepository.save(updatedMaterial);
-        return materialMapper.toResponseDTO(updatedMaterial);
+                .orElseThrow(() -> new ItemNotFoundException("Material não encontrado"));
+        Material updated = materialMapper.updateFromDTO(dto, material);
+        materialRepository.save(updated);
+        return materialMapper.toResponseDTO(updated);
     }
 
+    @Transactional
     public void delete(Long id) {
         if (!materialRepository.existsById(id)) {
-            throw new ItemNotFoundException();
+            throw new ItemNotFoundException("Material não encontrado");
         }
         materialRepository.deleteById(id);
     }
 
-
-
+    @Transactional(readOnly = true)
+    public Material findMaterialById(Long id) {
+        return materialRepository.findById(id)
+                .orElseThrow(() -> new ItemNotFoundException("Material não encontrado"));
+    }
 }

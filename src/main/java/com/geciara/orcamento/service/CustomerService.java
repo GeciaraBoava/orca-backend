@@ -42,6 +42,13 @@ public class CustomerService {
         return customerMapper.toResponseDTO(customer);
     }
 
+
+    public Customer findEntityById(Long id) {
+        Customer customer = customerRepository.findById(id)
+                .orElseThrow(ItemNotFoundException::new);
+        return customer;
+    }
+
     public Customer findCustomerById(Long id) {
         return customerRepository.findById(id)
                 .orElseThrow(ItemNotFoundException::new);

@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 @Embeddable
 public class Management {
 
-    private Boolean isIncludeInProduct;
+    private Boolean includeInProduct;
     private BigDecimal percentage;
     private BigDecimal valuePerDays;
     private Double days;

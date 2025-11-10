@@ -8,7 +8,7 @@
 		<version>3.4.4</version>
 		<relativePath/> </parent>
 	<groupId>com.geciara</groupId>
-	<artifactId>obudget_system</artifactId>
+	<artifactId>orca_backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>budget_system</name>
 	<description>Software de orçamento</description>

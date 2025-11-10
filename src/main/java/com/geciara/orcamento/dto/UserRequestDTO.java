@@ -1,20 +1,23 @@
 package com.geciara.orcamento.dto;
 
-import com.geciara.orcamento.model.enums.EUserRole;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
-@AllArgsConstructor
 public class UserRequestDTO {
 
-    @NotBlank(message = "Login é obrigatório")
-    private String login;
+    @NotBlank(message = "Username é obrigatório")
+    private String username;
 
+    @NotBlank(message = "Senha é obrigatória")
+    @Size(min = 6, message = "A senha deve ter no mínimo 6 caracteres")
+    private String password;
+
+    private String role; // Pode ser ADMIN, MANAGER, BUDGET, etc.
+
+    // Campos do register
     @NotBlank(message = "Nome é obrigatório")
     private String name;
 
@@ -34,8 +37,4 @@ public class UserRequestDTO {
     @NotBlank(message = "Estado é obrigatório")
     @Size(min = 2, max = 2, message = "Estado deve ter 2 caracteres")
     private String uf;
-
-    @NotNull(message = "Tipo de acesso é obrigatório")
-    private EUserRole role;
-
 }

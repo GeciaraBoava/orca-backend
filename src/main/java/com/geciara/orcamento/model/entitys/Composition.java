@@ -3,10 +3,7 @@ package com.geciara.orcamento.model.entitys;
 import com.geciara.orcamento.model.entitys.registerDetails.ItemType;
 import com.geciara.orcamento.model.entitys.registerDetails.UnitMeasure;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -15,11 +12,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "compositions")
 public class Composition {
@@ -32,39 +29,50 @@ public class Composition {
     @Column(nullable = false, length = 255, unique = true)
     private String description;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "material_type_id", nullable = false)
     private ItemType type;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "unit_measure_id", nullable = false)
     private UnitMeasure unitMeasure;
 
+    @OneToMany(mappedBy = "composition", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ItemComposition> materialCompositions = new ArrayList<>();
+
     @Column(nullable = false, updatable = false)
     private LocalDateTime registeredAt;
+
     private LocalDateTime updatedAt;
 
     @PrePersist
-    public void prePersist() {
+    protected void onCreate() {
         registeredAt = LocalDateTime.now();
-        updatedAt = LocalDateTime.now();
+        updatedAt = registeredAt;
     }
 
     @PreUpdate
-    public void preUpdate() {
+    protected void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
 
-    @OneToMany(mappedBy = "composition", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<MaterialComposition> materialComposition = new ArrayList<>();
-
-    private BigDecimal cost;
-
+    /**
+     * Calcula o custo total da composição considerando todos os ItemComposition associados,
+     * usando a data-base do orçamento.
+     */
     public BigDecimal getCost(LocalDate baseDate) {
-        return materialComposition.stream()
+        return materialCompositions.stream()
                 .map(mc -> Optional.ofNullable(mc.getCost(baseDate)).orElse(BigDecimal.ZERO))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
+    public void addMaterialComposition(ItemComposition mc) {
+        mc.setComposition(this);
+        materialCompositions.add(mc);
+    }
 
+    public void removeMaterialComposition(ItemComposition mc) {
+        materialCompositions.remove(mc);
+        mc.setComposition(null);
+    }
 }

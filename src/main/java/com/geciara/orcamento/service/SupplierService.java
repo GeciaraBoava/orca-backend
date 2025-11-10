@@ -3,6 +3,7 @@ package com.geciara.orcamento.service;
 import com.geciara.orcamento.dto.SupplierRequestDTO;
 import com.geciara.orcamento.dto.SupplierResponseDTO;
 import com.geciara.orcamento.dto.SupplierUpdateDTO;
+import com.geciara.orcamento.exceptions.EmailAlreadyExistsException;
 import com.geciara.orcamento.exceptions.ItemNotFoundException;
 import com.geciara.orcamento.mapper.SupplierMapper;
 import com.geciara.orcamento.model.entitys.Supplier;
@@ -25,9 +26,13 @@ public class SupplierService {
 
 
     public SupplierResponseDTO save(SupplierRequestDTO dto) {
+        if (supplierRepository.existsByRegisterName(dto.getName())) {
+            throw new EmailAlreadyExistsException("Nome já está em uso.");
+        }
+
         Supplier supplier = supplierMapper.toEntity(dto);
-        supplier = supplierRepository.save(supplier);
-        return supplierMapper.toResponseDTO(supplier);
+        Supplier savedSupplier = supplierRepository.save(supplier);
+        return supplierMapper.toResponseDTO(savedSupplier);
     }
 
     public List<SupplierResponseDTO> listAll() {
@@ -39,13 +44,13 @@ public class SupplierService {
 
     public SupplierResponseDTO findById(Long id) {
         Supplier supplier = supplierRepository.findById(id)
-                .orElseThrow(ItemNotFoundException::new);
+                .orElseThrow(() -> new ItemNotFoundException("Fornecedor não encontrado."));
         return supplierMapper.toResponseDTO(supplier);
     }
 
     public SupplierResponseDTO update(Long id, SupplierUpdateDTO dto) {
         Supplier supplier = supplierRepository.findById(id)
-                .orElseThrow(ItemNotFoundException::new);
+                .orElseThrow(() -> new ItemNotFoundException("Fornecedor não encontrado."));
         Supplier updatedSupplier = supplierMapper.updateFromDTO(dto, supplier);
         supplierRepository.save(updatedSupplier);
         return supplierMapper.toResponseDTO(updatedSupplier);

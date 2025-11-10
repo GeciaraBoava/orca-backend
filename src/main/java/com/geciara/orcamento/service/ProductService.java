@@ -5,91 +5,69 @@ import com.geciara.orcamento.dto.ProductResponseDTO;
 import com.geciara.orcamento.dto.ProductUpdateDTO;
 import com.geciara.orcamento.exceptions.ItemNotFoundException;
 import com.geciara.orcamento.mapper.ProductMapper;
-import com.geciara.orcamento.model.entitys.Composition;
 import com.geciara.orcamento.model.entitys.Product;
-import com.geciara.orcamento.model.entitys.registerDetails.MaterialType;
-import com.geciara.orcamento.model.entitys.registerDetails.UnitMeasure;
 import com.geciara.orcamento.repository.ProductRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
-
 
 @Service
 public class ProductService {
 
-    private final ProductRepository productRepository;
-    private final ProductMapper productMapper;
-    private final MaterialTypeService materialTypeService;
-    private final UnitMeasureService unitMeasureService;
-    private final CompositionService compositionService;
+    private final ProductRepository repository;
+    private final ProductMapper mapper;
 
-    public ProductService(
-            ProductRepository productRepository,
-            ProductMapper productMapper,
-            MaterialTypeService materialTypeService,
-            UnitMeasureService unitMeasureService,
-            CompositionService compositionService
-    ) {
-        this.productRepository = productRepository;
-        this.productMapper = productMapper;
-        this.materialTypeService = materialTypeService;
-        this.unitMeasureService = unitMeasureService;
-        this.compositionService = compositionService;
+    public ProductService(ProductRepository repository, ProductMapper mapper) {
+        this.repository = repository;
+        this.mapper = mapper;
     }
 
+    @Transactional
     public ProductResponseDTO save(ProductRequestDTO dto) {
-        MaterialType materialType = materialTypeService.findMaterialTypeById(dto.getMaterialTypeId());
-        UnitMeasure unitMeasure = unitMeasureService.findUnitMeasureById(dto.getUnitMeasureId());
-        List<Composition> compositionList = dto.getCompositionsIds()
-                .stream()
-                .map(compositionService::findProductItemById)
-                .toList();
-
-        Product product = productMapper.toEntity(dto,materialType, unitMeasure, compositionList);
-        product = productRepository.save(product);
-
-        return productMapper.toResponseDTO(product);
+        Product product = mapper.toEntity(dto);
+        // Atualiza custo e preço
+        product.updateCostAndPrice(product.getBudget(), LocalDate.now());
+        product = repository.save(product);
+        return mapper.toResponseDTO(product);
     }
 
+    @Transactional(readOnly = true)
     public List<ProductResponseDTO> listAll() {
-        return productRepository.findAll()
-                .stream()
-                .map(productMapper::toResponseDTO)
+        return repository.findAll().stream()
+                .map(mapper::toResponseDTO)
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     public ProductResponseDTO findById(Long id) {
-        Product product = productRepository.findById(id)
-                .orElseThrow(ItemNotFoundException::new);
-        return productMapper.toResponseDTO(product);
+        Product product = repository.findById(id)
+                .orElseThrow(() -> new ItemNotFoundException("Produto não encontrado"));
+        return mapper.toResponseDTO(product);
     }
 
-    public Product findProductById(Long id) {
-        return productRepository.findById(id)
-                .orElseThrow(ItemNotFoundException::new);
-    }
-
+    @Transactional
     public ProductResponseDTO update(Long id, ProductUpdateDTO dto) {
-        MaterialType materialType = materialTypeService.findMaterialTypeById(dto.getMaterialTypeId());
-        UnitMeasure unitMeasure = unitMeasureService.findUnitMeasureById(dto.getUnitMeasureId());
-        List<Composition> compositionList = dto.getProductItemIds()
-                .stream()
-                .map(compositionService::findProductItemById)
-                .toList();
-
-        Product product = productRepository.findById(id)
-                .orElseThrow(ItemNotFoundException::new);
-        Product updatedProduct = productMapper.updateFromDTO(dto, product, materialType, unitMeasure, compositionList);
-        productRepository.save(updatedProduct);
-        return productMapper.toResponseDTO(updatedProduct);
+        Product product = repository.findById(id)
+                .orElseThrow(() -> new ItemNotFoundException("Produto não encontrado"));
+        Product updatedProduct = mapper.updateFromDTO(dto, product);
+        updatedProduct.updateCostAndPrice(updatedProduct.getBudget(), LocalDate.now());
+        repository.save(updatedProduct);
+        return mapper.toResponseDTO(updatedProduct);
     }
 
+    @Transactional
     public void delete(Long id) {
-        if (!productRepository.existsById(id)) {
-            throw new ItemNotFoundException();
+        if (!repository.existsById(id)) {
+            throw new ItemNotFoundException("Produto não encontrado");
         }
-        productRepository.deleteById(id);
+        repository.deleteById(id);
     }
 
+    @Transactional(readOnly = true)
+    public Product findProductById(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new ItemNotFoundException("Produto não encontrado"));
+    }
 }

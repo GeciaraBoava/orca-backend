@@ -3,10 +3,7 @@ package com.geciara.orcamento.model.entitys;
 import com.geciara.orcamento.model.entitys.registerDetails.Register;
 import com.geciara.orcamento.model.enums.EUserRole;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,12 +12,12 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
-
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "users")
+@Builder
+@Entity
 @Table(name = "users")
 public class User implements UserDetails {
 
@@ -29,39 +26,41 @@ public class User implements UserDetails {
     @SequenceGenerator(name = "users_seq", sequenceName = "users_seq", allocationSize = 1)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true, length = 100)
     private String username;
 
     @Column(nullable = false)
     private String password;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = false, length = 20)
     private EUserRole role;
 
     @Embedded
     private Register register;
 
     @Column(nullable = false)
-    private boolean active;
+    private boolean active = true;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime registeredAt;
 
+    @Column(nullable = false)
     private LocalDateTime updatedAt;
 
     @PrePersist
-    public void prePersist() {
+    public void onCreate() {
         registeredAt = LocalDateTime.now();
         updatedAt = LocalDateTime.now();
+        if (register == null) {
+            register = new Register();
+        }
     }
 
     @PreUpdate
-    public void preUpdate() {
+    public void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
-
-    //CONFIGURAÇÕES DE SEGURANÇA
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -77,6 +76,21 @@ public class User implements UserDetails {
             );
             default -> List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
         };
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return active;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return active;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return active;
     }
 
     @Override

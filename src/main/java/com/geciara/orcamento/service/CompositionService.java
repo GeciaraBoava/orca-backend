@@ -6,14 +6,13 @@ import com.geciara.orcamento.dto.CompositionUpdateDTO;
 import com.geciara.orcamento.exceptions.ItemNotFoundException;
 import com.geciara.orcamento.mapper.CompositionMapper;
 import com.geciara.orcamento.model.entitys.Composition;
-import com.geciara.orcamento.model.entitys.Material;
 import com.geciara.orcamento.model.entitys.registerDetails.ItemType;
 import com.geciara.orcamento.model.entitys.registerDetails.UnitMeasure;
 import com.geciara.orcamento.repository.CompositionRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-
 
 @Service
 public class CompositionService {
@@ -23,7 +22,6 @@ public class CompositionService {
     private final ItemTypeService itemTypeService;
     private final UnitMeasureService unitMeasureService;
     private final MaterialService materialService;
-
 
     public CompositionService(
             CompositionRepository compositionRepository,
@@ -39,17 +37,27 @@ public class CompositionService {
         this.materialService = materialService;
     }
 
+    @Transactional
     public CompositionResponseDTO save(CompositionRequestDTO dto) {
+        Composition composition = compositionMapper.toEntity(dto);
+
         ItemType type = itemTypeService.findItemtypeById(dto.getTypeId());
         UnitMeasure unit = unitMeasureService.findUnitMeasureById(dto.getUnitMeasureId());
-        Material material = materialService.findMaterialById(dto.getMaterialId());
+        composition.setType(type);
+        composition.setUnitMeasure(unit);
 
-        Composition composition = compositionMapper.toEntity(dto, type, unit, material);
-        composition = compositionRepository.save(composition);
+        if (dto.getMaterialComposition() != null) {
+            dto.getMaterialComposition().forEach(mc -> {
+                mc.setMaterial(materialService.findMaterialById(mc.getMaterial().getId()));
+                composition.addMaterialComposition(mc);
+            });
+        }
 
-        return compositionMapper.toResponseDTO(composition);
+        Composition saved = compositionRepository.save(composition);
+        return compositionMapper.toResponseDTO(saved);
     }
 
+    @Transactional(readOnly = true)
     public List<CompositionResponseDTO> listAll() {
         return compositionRepository.findAll()
                 .stream()
@@ -57,30 +65,41 @@ public class CompositionService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     public CompositionResponseDTO findById(Long id) {
         Composition composition = compositionRepository.findById(id)
-                .orElseThrow(ItemNotFoundException::new);
+                .orElseThrow(() -> new ItemNotFoundException("Composição não encontrada"));
         return compositionMapper.toResponseDTO(composition);
     }
 
-    public Composition findProductItemById(Long id) {
-        return compositionRepository.findById(id)
-                .orElseThrow(ItemNotFoundException::new);
-    }
-
+    @Transactional
     public CompositionResponseDTO update(Long id, CompositionUpdateDTO dto) {
         Composition composition = compositionRepository.findById(id)
-                .orElseThrow(ItemNotFoundException::new);
-        Composition updatedComposition = compositionMapper.updateFromDTO(dto, composition);
-        compositionRepository.save(updatedComposition);
-        return compositionMapper.toResponseDTO(updatedComposition);
+                .orElseThrow(() -> new ItemNotFoundException("Composição não encontrada"));
+
+        Composition updated = compositionMapper.updateFromDTO(dto, composition);
+        if (dto.getTypeId() != null) {
+            updated.setType(itemTypeService.findItemtypeById(dto.getTypeId()));
+        }
+        if (dto.getUnitMeasureId() != null) {
+            updated.setUnitMeasure(unitMeasureService.findUnitMeasureById(dto.getUnitMeasureId()));
+        }
+
+        compositionRepository.save(updated);
+        return compositionMapper.toResponseDTO(updated);
     }
 
+    @Transactional
     public void delete(Long id) {
         if (!compositionRepository.existsById(id)) {
-            throw new ItemNotFoundException();
+            throw new ItemNotFoundException("Composição não encontrada");
         }
         compositionRepository.deleteById(id);
     }
 
+    @Transactional(readOnly = true)
+    public Composition findCompositionById(Long id) {
+        return compositionRepository.findById(id)
+                .orElseThrow(() -> new ItemNotFoundException("Composição não encontrada"));
+    }
 }

@@ -1,12 +1,11 @@
 package com.geciara.orcamento.dto;
 
-import com.geciara.orcamento.model.entitys.MaterialComposition;
+import com.geciara.orcamento.model.entitys.ItemComposition;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @Getter
@@ -19,10 +18,9 @@ public class CompositionRequestDTO {
     @NotNull(message = "Tipo é obrigatório")
     private Long typeId;
 
-    @NotNull(message = "Unidade de medida é obrigatório")
+    @NotNull(message = "Unidade de medida é obrigatória")
     private Long unitMeasureId;
 
-    @NotNull(message = "Material é obrigatório")
-    private List<MaterialComposition> materialComposition;
-
+    @NotNull(message = "Lista de materiais é obrigatória")
+    private List<ItemComposition> materialComposition;
 }
