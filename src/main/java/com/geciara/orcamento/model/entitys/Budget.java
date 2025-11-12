@@ -32,7 +32,8 @@ public class Budget {
 
     private LocalDate dateReference;
 
-    @Embedded
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
     private Customer customer;
 
     @OneToMany(mappedBy = "budget", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -68,20 +69,6 @@ public class Budget {
     @PreUpdate
     public void onUpdate() {
         updatedAt = LocalDateTime.now();
-    }
-
-    public void updateProductsCostAndPrice(LocalDate baseDate) {
-        for (Product product : products) {
-            product.updateCostAndPrice(this, baseDate);
-        }
-        // Atualiza totals do budget
-        this.totalCost = products.stream()
-                .map(Product::getCost)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-        this.totalPrice = products.stream()
-                .map(Product::getPrice)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     public void addProduct(Product product) {

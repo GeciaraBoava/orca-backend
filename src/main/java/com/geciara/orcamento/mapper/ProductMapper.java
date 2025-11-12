@@ -5,7 +5,6 @@ import com.geciara.orcamento.dto.ProductResponseDTO;
 import com.geciara.orcamento.dto.ProductUpdateDTO;
 import com.geciara.orcamento.model.entitys.Budget;
 import com.geciara.orcamento.model.entitys.Product;
-import com.geciara.orcamento.service.BudgetService;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -13,16 +12,14 @@ import java.util.stream.Collectors;
 
 @Component
 public class ProductMapper {
+    private final ItemCompositionMapper itemMapper;
 
-    private final BudgetService budgetService;
-
-    public ProductMapper(BudgetService budgetService) {
-        this.budgetService = budgetService;
+    public ProductMapper(ItemCompositionMapper itemMapper) {
+        this.itemMapper = itemMapper;
     }
 
-    public Product toEntity(ProductRequestDTO dto) {
+    public Product toEntity(ProductRequestDTO dto, Budget budget) {
         Product product = new Product();
-        Budget budget = budgetService.findEntityById(dto.getBudgetId());
         product.setBudget(budget);
         product.setDescription(dto.getDescription());
         return product;
@@ -38,12 +35,9 @@ public class ProductMapper {
         return dto;
     }
 
-    public Product updateFromDTO(ProductUpdateDTO dto, Product product) {
+    public Product updateFromDTO(ProductUpdateDTO dto, Product product, Budget budget) {
         if (dto.getDescription() != null) product.setDescription(dto.getDescription());
-        if (dto.getBudgetId() != null) {
-            Budget budget = budgetService.findEntityById(dto.getBudgetId());
-            product.setBudget(budget);
-        }
+        if (budget != null) product.setBudget(budget);
         return product;
     }
 

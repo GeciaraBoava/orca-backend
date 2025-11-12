@@ -1,4 +1,4 @@
 package com.geciara.orcamento.dto;
 
-public record LoginRequestDTO(String login, String password) {
+public record LoginRequestDTO(String username, String password) {
 }

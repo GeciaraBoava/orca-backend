@@ -1,10 +1,10 @@
 package com.geciara.orcamento.service;
 
-import com.geciara.orcamento.dto.MaterialCompositionRequestDTO;
+import com.geciara.orcamento.dto.ItemCompositionRequestDTO;
 import com.geciara.orcamento.dto.MaterialCompositionResponseDTO;
 import com.geciara.orcamento.dto.MaterialCompositionUpdateDTO;
 import com.geciara.orcamento.exceptions.ItemNotFoundException;
-import com.geciara.orcamento.mapper.MaterialCompositionMapper;
+import com.geciara.orcamento.mapper.ItemCompositionMapper;
 import com.geciara.orcamento.model.entitys.ItemComposition;
 import com.geciara.orcamento.model.enums.ETypeMaterialComposition;
 import com.geciara.orcamento.repository.MaterialCompositionRepository;
@@ -17,12 +17,12 @@ import java.util.List;
 public class MaterialCompositionService {
 
     private final MaterialCompositionRepository repository;
-    private final MaterialCompositionMapper mapper;
+    private final ItemCompositionMapper mapper;
     private final MaterialService materialService;
     private final CompositionService compositionService;
 
     public MaterialCompositionService(MaterialCompositionRepository repository,
-                                      MaterialCompositionMapper mapper,
+                                      ItemCompositionMapper mapper,
                                       MaterialService materialService,
                                       CompositionService compositionService) {
         this.repository = repository;
@@ -32,7 +32,7 @@ public class MaterialCompositionService {
     }
 
     @Transactional
-    public MaterialCompositionResponseDTO save(MaterialCompositionRequestDTO dto) {
+    public MaterialCompositionResponseDTO save(ItemCompositionRequestDTO dto) {
         ItemComposition mc = mapper.toEntity(dto);
         setMaterialOrComposition(mc, dto);
 
@@ -79,7 +79,7 @@ public class MaterialCompositionService {
     // --------------------------
     // Métodos privados
     // --------------------------
-    private void setMaterialOrComposition(ItemComposition mc, MaterialCompositionRequestDTO dto) {
+    private void setMaterialOrComposition(ItemComposition mc, ItemCompositionRequestDTO dto) {
         if (dto.getType() == ETypeMaterialComposition.MATERIAL) {
             mc.setMaterial(materialService.findMaterialById(dto.getMaterialId()));
         } else if (dto.getType() == ETypeMaterialComposition.COMPOSITION) {

@@ -3,6 +3,7 @@ package com.geciara.orcamento.controller;
 import com.geciara.orcamento.dto.ProductRequestDTO;
 import com.geciara.orcamento.dto.ProductResponseDTO;
 import com.geciara.orcamento.dto.ProductUpdateDTO;
+import com.geciara.orcamento.model.entitys.Budget;
 import com.geciara.orcamento.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -42,8 +43,8 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<ProductResponseDTO> save(@RequestBody @Valid ProductRequestDTO entity) {
-        ProductResponseDTO savedEntity = productService.save(entity);
+    public ResponseEntity<ProductResponseDTO> save(@RequestBody @Valid ProductRequestDTO entity, Budget budget) {
+        ProductResponseDTO savedEntity = productService.save(entity, budget);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedEntity);
     }
 
@@ -54,8 +55,8 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProductResponseDTO> update(@PathVariable Long id,@RequestBody @Valid ProductUpdateDTO entity) {
-        ProductResponseDTO updatedEntity = productService.update(id, entity);
+    public ResponseEntity<ProductResponseDTO> update(@PathVariable Long id,@RequestBody @Valid ProductUpdateDTO entity, Budget budget) {
+        ProductResponseDTO updatedEntity = productService.update(id, entity, budget);
         return ResponseEntity.ok(updatedEntity);
 
     }

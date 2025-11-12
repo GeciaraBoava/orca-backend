@@ -16,16 +16,21 @@ public class Taxes {
     private BigDecimal pis = BigDecimal.ZERO;
     private BigDecimal cofins = BigDecimal.ZERO;
 
-    public BigDecimal calculateTotal(BigDecimal base) {
+    public BigDecimal getTotal(BigDecimal base) {
         BigDecimal total = BigDecimal.ZERO;
         if (base == null) return total;
 
-        total = total.add(icms != null ? base.multiply(icms.divide(BigDecimal.valueOf(100))) : BigDecimal.ZERO);
-        total = total.add(iss != null ? base.multiply(iss.divide(BigDecimal.valueOf(100))) : BigDecimal.ZERO);
-        total = total.add(pis != null ? base.multiply(pis.divide(BigDecimal.valueOf(100))) : BigDecimal.ZERO);
-        total = total.add(cofins != null ? base.multiply(cofins.divide(BigDecimal.valueOf(100))) : BigDecimal.ZERO);
+        total = total.add(icms != null ? taxToPercent(base, icms) : BigDecimal.ZERO);
+        total = total.add(iss != null ? taxToPercent(base, iss) : BigDecimal.ZERO);
+        total = total.add(pis != null ? taxToPercent(base, pis) : BigDecimal.ZERO);
+        total = total.add(cofins != null ? taxToPercent(base, cofins) : BigDecimal.ZERO);
 
         return total;
+    }
+
+    private BigDecimal taxToPercent(BigDecimal base, BigDecimal tax) {
+        if (base == null) return BigDecimal.ZERO;
+        return base.multiply(tax.divide(BigDecimal.valueOf(100)));
     }
 
     public Taxes(Taxes taxes) {

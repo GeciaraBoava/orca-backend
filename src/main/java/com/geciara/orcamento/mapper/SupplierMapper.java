@@ -16,13 +16,13 @@ public class SupplierMapper {
 
         Supplier supplier = new Supplier();
 
-        supplier.getRegister().setName(dto.getName());
-        supplier.getRegister().setPhone(dto.getPhone());
+        supplier.getPersonDates().setName(dto.getName());
+        supplier.getPersonDates().setPhone(dto.getPhone());
         supplier.setContactName(dto.getContactName());
-        supplier.getRegister().setEmail(dto.getEmail());
-        supplier.getRegister().setAddress(dto.getAddress());
-        supplier.getRegister().setCity(dto.getCity());
-        supplier.getRegister().setUf(dto.getUf());
+        supplier.getPersonDates().setEmail(dto.getEmail());
+        supplier.getPersonDates().setAddress(dto.getAddress());
+        supplier.getPersonDates().setCity(dto.getCity());
+        supplier.getPersonDates().setUf(dto.getUf());
         supplier.setRegisteredAt(LocalDateTime.now());
         supplier.setActive(true);
 
@@ -34,13 +34,13 @@ public class SupplierMapper {
 
         if (dto == null) return null;
 
-        if(dto.getName() != null) supplier.getRegister().setName(dto.getName());
-        if(dto.getPhone() != null) supplier.getRegister().setPhone(dto.getPhone());
+        if(dto.getName() != null) supplier.getPersonDates().setName(dto.getName());
+        if(dto.getPhone() != null) supplier.getPersonDates().setPhone(dto.getPhone());
         if(dto.getContactName() != null) supplier.setContactName(dto.getContactName());
-        if(dto.getEmail() != null) supplier.getRegister().setEmail(dto.getEmail());
-        if(dto.getAddress() != null) supplier.getRegister().setAddress(dto.getAddress());
-        if(dto.getCity() != null) supplier.getRegister().setCity(dto.getCity());
-        if(dto.getUf() != null) supplier.getRegister().setUf(dto.getUf());
+        if(dto.getEmail() != null) supplier.getPersonDates().setEmail(dto.getEmail());
+        if(dto.getAddress() != null) supplier.getPersonDates().setAddress(dto.getAddress());
+        if(dto.getCity() != null) supplier.getPersonDates().setCity(dto.getCity());
+        if(dto.getUf() != null) supplier.getPersonDates().setUf(dto.getUf());
         if(dto.getActive() != null) supplier.setActive(dto.getActive());
         supplier.setUpdatedAt(LocalDateTime.now());
 
@@ -51,13 +51,13 @@ public class SupplierMapper {
         SupplierResponseDTO dto = new SupplierResponseDTO();
 
         dto.setId(supplier.getId());
-        dto.setName(supplier.getRegister().getName());
-        dto.setPhone(supplier.getRegister().getPhone());
+        dto.setName(supplier.getPersonDates().getName());
+        dto.setPhone(supplier.getPersonDates().getPhone());
         dto.setContactName(supplier.getContactName());
-        dto.setEmail(supplier.getRegister().getEmail());
-        dto.setAddress(supplier.getRegister().getAddress());
-        dto.setCity(supplier.getRegister().getCity());
-        dto.setUf(supplier.getRegister().getUf());
+        dto.setEmail(supplier.getPersonDates().getEmail());
+        dto.setAddress(supplier.getPersonDates().getAddress());
+        dto.setCity(supplier.getPersonDates().getCity());
+        dto.setUf(supplier.getPersonDates().getUf());
         dto.setActive(supplier.isActive());
         dto.setRegisteredAt(supplier.getRegisteredAt());
         dto.setUpdatedAt(supplier.getUpdatedAt());

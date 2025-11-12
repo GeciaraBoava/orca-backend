@@ -1,4 +1,4 @@
-package com.geciara.orcamento.service;
+package com.geciara.orcamento.config.security;
 
 import com.geciara.orcamento.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,8 +16,8 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username)
-            throws UsernameNotFoundException {
-        return userRepository.findByUsername(username);
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado: " + username));
     }
 }

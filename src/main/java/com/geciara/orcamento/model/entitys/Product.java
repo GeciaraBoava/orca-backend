@@ -8,11 +8,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Getter
 @Setter
@@ -60,24 +58,5 @@ public class Product {
     @PreUpdate
     public void onUpdate() {
         updatedAt = LocalDateTime.now();
-    }
-
-    /**
-     * Calcula o custo total baseado nas composições.
-     */
-    public BigDecimal calculateCost(LocalDate baseDate) {
-        return items.stream()
-                .map(mc -> Optional.ofNullable(mc.getCost(baseDate)).orElse(BigDecimal.ZERO))
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-    }
-
-    /**
-     * Atualiza o custo e o preço do produto usando os impostos do budget.
-     */
-    public void updateCostAndPrice(Budget budget, LocalDate baseDate) {
-        this.cost = calculateCost(baseDate);
-        Taxes taxes = budget.getTaxes();
-        this.taxes = taxes != null ? new Taxes(taxes) : new Taxes();
-        this.price = this.cost.add(this.taxes.calculateTotal(this.cost));
     }
 }

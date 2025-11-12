@@ -22,6 +22,9 @@ public class ItemComposition {
     @SequenceGenerator(name = "item_composition_seq", sequenceName = "item_composition_seq", allocationSize = 1)
     private Long id;
 
+    @Column(nullable = false)
+    private String description;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private ETypeMaterialComposition type;
@@ -33,6 +36,10 @@ public class ItemComposition {
     @ManyToOne
     @JoinColumn(name = "material_id")
     private Material material;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id", nullable = false)
+    private Product product;
 
     @Column(nullable = false)
     private BigDecimal quantity;

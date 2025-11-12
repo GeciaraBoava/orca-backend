@@ -10,10 +10,9 @@ import java.time.LocalDateTime;
 public class UserResponseDTO {
 
     private Long id;
-    private String username;
     private EUserRole role;
 
-    // Campos do Register
+    // Campos do PersonDates
     private String name;
     private String phone;
     private String email;

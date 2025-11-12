@@ -9,7 +9,7 @@ import java.util.Optional;
 @Repository
 public interface UnitMeasureRepository extends JpaRepository<UnitMeasure, Long> {
 
-    Optional<UnitMeasure> findByDescription(String description);
+    Optional<UnitMeasure> findById(Long id);
 
 
 }

@@ -8,21 +8,18 @@ import lombok.Data;
 @Data
 public class UserRequestDTO {
 
-    @NotBlank(message = "Username é obrigatório")
-    private String username;
-
     @NotBlank(message = "Senha é obrigatória")
     @Size(min = 6, message = "A senha deve ter no mínimo 6 caracteres")
     private String password;
 
-    private String role; // Pode ser ADMIN, MANAGER, BUDGET, etc.
+    private String role;
 
-    // Campos do register
+    // Campos do personDates
     @NotBlank(message = "Nome é obrigatório")
     private String name;
 
     @NotBlank(message = "Telefone é obrigatório")
-    private String phone;
+    private String phoneNumber;
 
     @NotBlank(message = "Email é obrigatório")
     @Email(message = "Email inválido")

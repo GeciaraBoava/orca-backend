@@ -1,9 +1,11 @@
 package com.geciara.orcamento.model.entitys;
 
-import com.geciara.orcamento.model.entitys.registerDetails.Register;
+import com.geciara.orcamento.model.entitys.registerDetails.PersonDates;
 import com.geciara.orcamento.model.enums.EUserRole;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,12 +13,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
 @Entity
 @Table(name = "users")
 public class User implements UserDetails {
@@ -37,7 +37,8 @@ public class User implements UserDetails {
     private EUserRole role;
 
     @Embedded
-    private Register register;
+    @ToString.Exclude
+    private PersonDates personDates;
 
     @Column(nullable = false)
     private boolean active = true;
@@ -48,18 +49,32 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private LocalDateTime updatedAt;
 
+    //------------------------------
+
     @PrePersist
     public void onCreate() {
         registeredAt = LocalDateTime.now();
         updatedAt = LocalDateTime.now();
-        if (register == null) {
-            register = new Register();
+        if (personDates == null) {
+            personDates = new PersonDates();
         }
     }
 
     @PreUpdate
     public void onUpdate() {
         updatedAt = LocalDateTime.now();
+    }
+
+    //------------------------------
+
+    @Override
+    public String getUsername() {
+        return this.username;
+    }
+
+    @Override
+    public String getPassword() {
+        return this.password;
     }
 
     @Override
@@ -96,5 +111,18 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return active;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

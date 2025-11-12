@@ -7,8 +7,6 @@ import lombok.Data;
 @Data
 public class UserUpdateRequestDTO {
 
-    private String username;
-
     @Size(min = 6, message = "A senha deve ter no mínimo 6 caracteres")
     private String password;
 

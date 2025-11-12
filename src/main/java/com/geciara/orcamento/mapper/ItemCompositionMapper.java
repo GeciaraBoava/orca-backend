@@ -1,6 +1,6 @@
 package com.geciara.orcamento.mapper;
 
-import com.geciara.orcamento.dto.MaterialCompositionRequestDTO;
+import com.geciara.orcamento.dto.ItemCompositionRequestDTO;
 import com.geciara.orcamento.dto.MaterialCompositionResponseDTO;
 import com.geciara.orcamento.dto.MaterialCompositionUpdateDTO;
 import com.geciara.orcamento.model.entitys.ItemComposition;
@@ -9,14 +9,15 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 
 @Component
-public class MaterialCompositionMapper {
+public class ItemCompositionMapper {
 
-    public ItemComposition toEntity(MaterialCompositionRequestDTO dto) {
-        ItemComposition mc = new ItemComposition();
-        mc.setType(dto.getType());
-        mc.setQuantity(dto.getQuantity());
+    public ItemComposition toEntity(ItemCompositionRequestDTO dto) {
+        ItemComposition item = new ItemComposition();
+        item.setDescription(dto.getDescription());
+        item.setType(dto.getType());
+        item.setQuantity(dto.getQuantity());
         // composition e material serão setados no service
-        return mc;
+        return item;
     }
 
     public MaterialCompositionResponseDTO toResponseDTO(ItemComposition entity) {

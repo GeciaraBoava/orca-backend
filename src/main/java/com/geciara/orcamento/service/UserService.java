@@ -1,5 +1,6 @@
 package com.geciara.orcamento.service;
 
+import com.geciara.orcamento.config.security.TokenService;
 import com.geciara.orcamento.dto.UserRequestDTO;
 import com.geciara.orcamento.dto.UserResponseDTO;
 import com.geciara.orcamento.dto.UserUpdateRequestDTO;
@@ -21,16 +22,22 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final TokenService tokenService;
 
-    public UserService(UserRepository userRepository, UserMapper userMapper, BCryptPasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository,
+                       UserMapper userMapper,
+                       BCryptPasswordEncoder passwordEncoder,
+                       TokenService tokenService
+    ) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.passwordEncoder = passwordEncoder;
+        this.tokenService = tokenService;
     }
 
     @Transactional
     public UserResponseDTO save(UserRequestDTO dto) {
-        if (userRepository.existsByRegisterEmail(dto.getEmail())) {
+        if (userRepository.existsByUsername(dto.getEmail())) {
             throw new EmailAlreadyExistsException("E-mail já está em uso.");
         }
 
@@ -39,6 +46,19 @@ public class UserService {
 
         User savedUser = userRepository.save(user);
         return userMapper.toResponseDTO(savedUser);
+    }
+
+    @Transactional
+    public String registerAndGenerateToken(UserRequestDTO dto) {
+        if (userRepository.existsByUsername(dto.getEmail())) {
+            throw new EmailAlreadyExistsException("E-mail já está em uso.");
+        }
+
+        User user = userMapper.toEntity(dto);
+        user.setPassword(passwordEncoder.encode(dto.getPassword()));
+        userRepository.save(user);
+
+        return tokenService.generateToken(dto.getEmail());
     }
 
     @Transactional(readOnly = true)
@@ -56,12 +76,26 @@ public class UserService {
         return userMapper.toResponseDTO(user);
     }
 
+    @Transactional(readOnly = true)
+    public User findEntityByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new ItemNotFoundException("Usuário não encontrado."));
+    }
+
     @Transactional
     public UserResponseDTO update(Long id, UserUpdateRequestDTO dto) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("Usuário não encontrado."));
 
+        if (dto.getEmail() != null && !dto.getEmail().equals(user.getUsername())) {
+            if (userRepository.existsByUsername(dto.getEmail())) {
+                throw new EmailAlreadyExistsException("E-mail já está em uso.");
+            }
+            user.setUsername(dto.getEmail());
+        }
+
         User updatedUser = userMapper.updateFromDTO(dto, user);
+
         if (dto.getPassword() != null && !dto.getPassword().isBlank()) {
             updatedUser.setPassword(passwordEncoder.encode(dto.getPassword()));
         }
@@ -83,6 +117,22 @@ public class UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("Usuário não encontrado."));
         user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+    }
+
+    @Transactional
+    public void deactivateUser(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("Usuário não encontrado."));
+        user.setActive(false);
+        userRepository.save(user);
+    }
+
+    @Transactional
+    public void activateUser(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("Usuário não encontrado."));
+        user.setActive(true);
         userRepository.save(user);
     }
 }

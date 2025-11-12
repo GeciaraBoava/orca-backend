@@ -38,12 +38,12 @@ public class MaterialMapper {
         material.setRegisteredAt(LocalDateTime.now());
         material.setActive(true);
 
-        MaterialType materialType = materialTypeRepository.findByDescription(dto.getMaterialTypeDescription())
+        MaterialType materialType = materialTypeRepository.findById(dto.getMaterialTypeId())
                         .orElseThrow(ItemNotFoundException::new);
 
         material.setMaterialType(materialType);
 
-        UnitMeasure unitMeasure = unitMeasureRepository.findByDescription(dto.getUnitMeasureDescription())
+        UnitMeasure unitMeasure = unitMeasureRepository.findById(dto.getUnitMeasureId())
                         .orElseThrow(ItemNotFoundException::new);
 
         material.setUnitMeasure(unitMeasure);
@@ -66,16 +66,16 @@ public class MaterialMapper {
         if(dto.getActive() != null) material.setActive(dto.getActive());
         material.setUpdatedAt(LocalDateTime.now());
 
-        if(dto.getMaterialTypeDescription() != null) {
-            MaterialType materialType = materialTypeRepository.findByDescription(dto.getMaterialTypeDescription())
+        if(dto.getMaterialTypeId() != null) {
+            MaterialType materialType = materialTypeRepository.findById(dto.getMaterialTypeId())
                     .orElseThrow(ItemNotFoundException::new);
 
             material.setMaterialType(materialType);
         }
 
-        if(dto.getUnitMeasureDescription() != null) {
+        if(dto.getUnitMeasureId() != null) {
 
-            UnitMeasure unitMeasure = unitMeasureRepository.findByDescription(dto.getUnitMeasureDescription())
+            UnitMeasure unitMeasure = unitMeasureRepository.findById(dto.getUnitMeasureId())
                     .orElseThrow(ItemNotFoundException::new);
 
             material.setUnitMeasure(unitMeasure);

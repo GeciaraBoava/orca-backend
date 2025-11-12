@@ -1,6 +1,6 @@
 package com.geciara.orcamento.model.entitys;
 
-import com.geciara.orcamento.model.entitys.registerDetails.Register;
+import com.geciara.orcamento.model.entitys.registerDetails.PersonDates;
 import com.geciara.orcamento.model.enums.ECustomerType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -15,7 +15,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Embeddable
 @Table(name = "customer")
 public class Customer {
 
@@ -25,7 +24,7 @@ public class Customer {
     private Long id;
 
     @Embedded
-    private Register register;
+    private PersonDates personDates;
 
     @Column(nullable = false)
     private String contactName;
@@ -45,8 +44,8 @@ public class Customer {
     public void onCreate() {
         registeredAt = LocalDateTime.now();
         updatedAt = LocalDateTime.now();
-        if (register == null) {
-            register = new Register();
+        if (personDates == null) {
+            personDates = new PersonDates();
         }
     }
 
