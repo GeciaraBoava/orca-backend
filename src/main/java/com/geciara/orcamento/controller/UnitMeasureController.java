@@ -17,7 +17,7 @@ import java.util.List;
 
 @Tag(name = "Unidades de medida", description = "Gerenciamento de unidades de medida do sistema")
 @RestController
-@RequestMapping("/api/unit-measures")
+@RequestMapping("/config/unit-measures")
 @Validated
 public class UnitMeasureController {
 

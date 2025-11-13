@@ -5,6 +5,7 @@ import com.geciara.orcamento.dto.LoginRequestDTO;
 import com.geciara.orcamento.dto.LoginResponseDTO;
 import com.geciara.orcamento.dto.UserRequestDTO;
 import com.geciara.orcamento.exceptions.EmailAlreadyExistsException;
+import com.geciara.orcamento.model.entitys.User;
 import com.geciara.orcamento.repository.UserRepository;
 import com.geciara.orcamento.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -50,8 +51,10 @@ public class AuthController {
             var usernamePassword = new UsernamePasswordAuthenticationToken(body.username(), body.password());
             var auth = this.authenticationManager.authenticate(usernamePassword);
             var token = tokenService.generateToken(body.username());
+            var user = (User) auth.getPrincipal();
+            var name = user.getPersonDates().getName();
 
-            return ResponseEntity.ok(new LoginResponseDTO(token));
+            return ResponseEntity.ok(new LoginResponseDTO(token, name));
         } catch (AuthenticationException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
@@ -64,7 +67,9 @@ public class AuthController {
     public ResponseEntity<LoginResponseDTO> register(@RequestBody @Valid UserRequestDTO body) {
         try {
             var token = userService.registerAndGenerateToken(body);
-            return ResponseEntity.ok(new LoginResponseDTO(token));
+            var name = body.getName();
+
+            return ResponseEntity.ok(new LoginResponseDTO(token, name));
         } catch (EmailAlreadyExistsException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }

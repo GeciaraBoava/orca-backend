@@ -17,7 +17,7 @@ import java.util.List;
 
 @Tag(name = "Tipos de itens", description = "Gerenciamento de tipos de itens do sistema")
 @RestController
-@RequestMapping("/api/items-types")
+@RequestMapping("/config/items-types")
 @Validated
 public class ItemTypeController {
 
