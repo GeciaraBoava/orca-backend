@@ -62,7 +62,7 @@ public class SecurityConfig {
                     .hasAnyAuthority("ROLE_ADMIN")
 
                     // Apenas MANAGER e ADMIN
-                    .requestMatchers("/api/users/**")
+                    .requestMatchers("/api/users/**", "/api/users")
                     .hasAnyAuthority("ROLE_MANAGER", "ROLE_ADMIN")
 
                     // BUDGET, MANAGER e ADMIN → CRUD de orçamentos, produtos, insumos

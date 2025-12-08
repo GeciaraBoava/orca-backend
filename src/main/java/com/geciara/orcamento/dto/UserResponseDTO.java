@@ -14,7 +14,7 @@ public class UserResponseDTO {
 
     // Campos do PersonDates
     private String name;
-    private String phone;
+    private String phoneNumber;
     private String email;
     private String address;
     private String city;

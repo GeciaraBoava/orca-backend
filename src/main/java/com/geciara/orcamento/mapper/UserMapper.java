@@ -36,7 +36,7 @@ public class UserMapper {
 
         if (user.getPersonDates() != null) {
             dto.setName(user.getPersonDates().getName());
-            dto.setPhone(user.getPersonDates().getPhone());
+            dto.setPhoneNumber(user.getPersonDates().getPhone());
             dto.setEmail(user.getPersonDates().getEmail());
             dto.setAddress(user.getPersonDates().getAddress());
             dto.setCity(user.getPersonDates().getCity());

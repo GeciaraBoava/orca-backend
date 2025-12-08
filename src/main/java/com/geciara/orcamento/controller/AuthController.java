@@ -53,8 +53,9 @@ public class AuthController {
             var token = tokenService.generateToken(body.username());
             var user = (User) auth.getPrincipal();
             var name = user.getPersonDates().getName();
+            var role = user.getRole().getProfile();
 
-            return ResponseEntity.ok(new LoginResponseDTO(token, name));
+            return ResponseEntity.ok(new LoginResponseDTO(token, name, role));
         } catch (AuthenticationException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
@@ -68,8 +69,9 @@ public class AuthController {
         try {
             var token = userService.registerAndGenerateToken(body);
             var name = body.getName();
+            var role = body.getRole();
 
-            return ResponseEntity.ok(new LoginResponseDTO(token, name));
+            return ResponseEntity.ok(new LoginResponseDTO(token, name, role));
         } catch (EmailAlreadyExistsException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
