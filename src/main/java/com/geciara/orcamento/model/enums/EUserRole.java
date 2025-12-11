@@ -23,5 +23,14 @@ public enum EUserRole {
     public GrantedAuthority getAuthority() {
         return new org.springframework.security.core.authority.SimpleGrantedAuthority("ROLE_" + this.name());
     }
+
+    public static EUserRole getRoleByProfile(String profile) {
+        for (EUserRole role : EUserRole.values()) {
+            if (role.getProfile().equalsIgnoreCase(profile)) {
+                return role;
+            }
+        }
+        return null;
+    }
 }
 

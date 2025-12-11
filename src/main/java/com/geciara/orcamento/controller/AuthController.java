@@ -3,8 +3,6 @@ package com.geciara.orcamento.controller;
 import com.geciara.orcamento.config.security.TokenService;
 import com.geciara.orcamento.dto.LoginRequestDTO;
 import com.geciara.orcamento.dto.LoginResponseDTO;
-import com.geciara.orcamento.dto.UserRequestDTO;
-import com.geciara.orcamento.exceptions.EmailAlreadyExistsException;
 import com.geciara.orcamento.model.entitys.User;
 import com.geciara.orcamento.repository.UserRepository;
 import com.geciara.orcamento.service.UserService;
@@ -61,19 +59,19 @@ public class AuthController {
         }
     }
 
-    @Operation(summary = "Fazer cadastro", description = "Faz um novo cadastro e gera um token JWT para autenticação")
-    @ApiResponse(responseCode = "200", description = "Cadastro bem-sucedido")
-    @ApiResponse(responseCode = "400", description = "Usuário já existe")
-    @PostMapping("/register")
-    public ResponseEntity<LoginResponseDTO> register(@RequestBody @Valid UserRequestDTO body) {
-        try {
-            var token = userService.registerAndGenerateToken(body);
-            var name = body.getName();
-            var role = body.getRole();
-
-            return ResponseEntity.ok(new LoginResponseDTO(token, name, role));
-        } catch (EmailAlreadyExistsException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
-    }
+//    @Operation(summary = "Fazer cadastro", description = "Faz um novo cadastro e gera um token JWT para autenticação")
+//    @ApiResponse(responseCode = "200", description = "Cadastro bem-sucedido")
+//    @ApiResponse(responseCode = "400", description = "Usuário já existe")
+//    @PostMapping("/register")
+//    public ResponseEntity<LoginResponseDTO> register(@RequestBody @Valid UserRequestDTO body) {
+//        try {
+//            var token = userService.registerAndGenerateToken(body);
+//            var name = body.getName();
+//            var role = body.getRole();
+//
+//            return ResponseEntity.ok(new LoginResponseDTO(token, name, role));
+//        } catch (EmailAlreadyExistsException e) {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+//        }
+//    }
 }

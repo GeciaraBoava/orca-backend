@@ -15,7 +15,7 @@ public class UserMapper {
 
         User user = new User();
         user.setUsername(dto.getEmail());
-        user.setRole(EUserRole.valueOf(dto.getRole()));
+        user.setRole(EUserRole.getRoleByProfile(dto.getRole()));
 
         PersonDates personDates = new PersonDates();
         personDates.setName(dto.getName());
@@ -32,7 +32,7 @@ public class UserMapper {
     public UserResponseDTO toResponseDTO(User user) {
         UserResponseDTO dto = new UserResponseDTO();
         dto.setId(user.getId());
-        dto.setRole(user.getRole());
+        dto.setRole(user.getRole().getProfile());
 
         if (user.getPersonDates() != null) {
             dto.setName(user.getPersonDates().getName());
@@ -51,18 +51,18 @@ public class UserMapper {
     }
 
     public User updateFromDTO(UserUpdateRequestDTO dto, User user) {
-        if (dto.getRole() != null) {
-            user.setRole(EUserRole.valueOf(dto.getRole()));
-        }
+        if (dto.getRole() != null) user.setRole(EUserRole.getRoleByProfile(dto.getRole()));
 
-        PersonDates personDates = user.getPersonDates();
+        user.setActive(dto.isActive());
+
+            PersonDates personDates = user.getPersonDates();
         if (personDates == null) {
             personDates = new PersonDates();
             user.setPersonDates(personDates);
         }
 
         if (dto.getName() != null) personDates.setName(dto.getName());
-        if (dto.getPhone() != null) personDates.setPhone(dto.getPhone());
+        if (dto.getPhoneNumber() != null) personDates.setPhone(dto.getPhoneNumber());
         if (dto.getEmail() != null) {
             personDates.setEmail(dto.getEmail());
             // Atualiza username também (já que username = email)

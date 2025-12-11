@@ -42,23 +42,10 @@ public class UserService {
         }
 
         User user = userMapper.toEntity(dto);
-        user.setPassword(passwordEncoder.encode(dto.getPassword()));
+        user.setPassword(passwordEncoder.encode("123456"));
 
         User savedUser = userRepository.save(user);
         return userMapper.toResponseDTO(savedUser);
-    }
-
-    @Transactional
-    public String registerAndGenerateToken(UserRequestDTO dto) {
-        if (userRepository.existsByUsername(dto.getEmail())) {
-            throw new EmailAlreadyExistsException("E-mail já está em uso.");
-        }
-
-        User user = userMapper.toEntity(dto);
-        user.setPassword(passwordEncoder.encode(dto.getPassword()));
-        userRepository.save(user);
-
-        return tokenService.generateToken(dto.getEmail());
     }
 
     @Transactional(readOnly = true)

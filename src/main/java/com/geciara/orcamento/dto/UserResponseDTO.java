@@ -1,7 +1,6 @@
 package com.geciara.orcamento.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.geciara.orcamento.model.enums.EUserRole;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -10,7 +9,7 @@ import java.time.LocalDateTime;
 public class UserResponseDTO {
 
     private Long id;
-    private EUserRole role;
+    private String role;
 
     // Campos do PersonDates
     private String name;

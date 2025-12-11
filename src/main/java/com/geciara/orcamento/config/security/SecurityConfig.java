@@ -46,7 +46,8 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, DaoAuthenticationProvider daoAuthProvider) throws Exception {
-        http.csrf(AbstractHttpConfigurer::disable)
+        http.cors(cors -> {})
+            .csrf(AbstractHttpConfigurer::disable)
             .authenticationProvider(daoAuthProvider)
             .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
