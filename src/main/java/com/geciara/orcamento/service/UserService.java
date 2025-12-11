@@ -64,6 +64,13 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
+    public UserResponseDTO findByUsername(String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new ItemNotFoundException("Usuário não encontrado."));
+        return userMapper.toResponseDTO(user);
+    }
+
+    @Transactional(readOnly = true)
     public User findEntityByUsername(String username) {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new ItemNotFoundException("Usuário não encontrado."));

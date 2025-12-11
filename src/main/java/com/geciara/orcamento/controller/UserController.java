@@ -32,12 +32,20 @@ public class UserController {
         return ResponseEntity.ok(userService.listAll());
     }
 
+    @Operation(summary = "Buscar usuário por username", description = "Recupera um usuário pelo seu username")
+    @ApiResponse(responseCode = "200", description = "Usuário encontrado")
+    @ApiResponse(responseCode = "403", description = "Acesso negado")
+    @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
+    @GetMapping("/username/{username}")
+    public ResponseEntity<UserResponseDTO> findByUsername(@PathVariable String username) {
+        return ResponseEntity.ok(userService.findByUsername(username));
+    }
 
     @Operation(summary = "Buscar usuário por ID", description = "Recupera um usuário pelo seu ID")
     @ApiResponse(responseCode = "200", description = "Usuário encontrado")
     @ApiResponse(responseCode = "403", description = "Acesso negado")
     @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public ResponseEntity<UserResponseDTO> findById(@PathVariable Long id) {
         return ResponseEntity.ok(userService.findById(id));
     }

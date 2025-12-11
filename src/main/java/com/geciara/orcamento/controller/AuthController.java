@@ -52,26 +52,11 @@ public class AuthController {
             var user = (User) auth.getPrincipal();
             var name = user.getPersonDates().getName();
             var role = user.getRole().getProfile();
+            var username = user.getUsername();
 
-            return ResponseEntity.ok(new LoginResponseDTO(token, name, role));
+            return ResponseEntity.ok(new LoginResponseDTO(token, name, role, username));
         } catch (AuthenticationException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
-
-//    @Operation(summary = "Fazer cadastro", description = "Faz um novo cadastro e gera um token JWT para autenticação")
-//    @ApiResponse(responseCode = "200", description = "Cadastro bem-sucedido")
-//    @ApiResponse(responseCode = "400", description = "Usuário já existe")
-//    @PostMapping("/register")
-//    public ResponseEntity<LoginResponseDTO> register(@RequestBody @Valid UserRequestDTO body) {
-//        try {
-//            var token = userService.registerAndGenerateToken(body);
-//            var name = body.getName();
-//            var role = body.getRole();
-//
-//            return ResponseEntity.ok(new LoginResponseDTO(token, name, role));
-//        } catch (EmailAlreadyExistsException e) {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-//        }
-//    }
 }
