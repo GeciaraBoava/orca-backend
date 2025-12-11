@@ -100,10 +100,14 @@ public class UserService {
     }
 
     @Transactional
-    public void updatePassword(Long id, String newPassword) {
+    public void updatePassword(Long id, String newPassword, String oldPassword) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("Usuário não encontrado."));
-        user.setPassword(passwordEncoder.encode(newPassword));
+
+        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+            user.setPassword(passwordEncoder.encode(newPassword));
+        }
+
         userRepository.save(user);
     }
 

@@ -62,8 +62,8 @@ public class UserController {
     }
 
     @PutMapping("/usuario/{id}/senha")
-    public ResponseEntity<Void> atualizarSenha(@PathVariable Long id, @RequestBody @Valid String novaSenha) {
-        userService.updatePassword(id, novaSenha);
+    public ResponseEntity<Void> atualizarSenha(@PathVariable Long id, @RequestBody @Valid String newPassword, @RequestBody @Valid String oldPassword) {
+        userService.updatePassword(id, newPassword, oldPassword);
         return ResponseEntity.noContent().build();
     }
 
