@@ -4,6 +4,7 @@ import com.geciara.orcamento.dto.SupplierRequestDTO;
 import com.geciara.orcamento.dto.SupplierResponseDTO;
 import com.geciara.orcamento.dto.SupplierUpdateDTO;
 import com.geciara.orcamento.model.entitys.Supplier;
+import com.geciara.orcamento.model.entitys.registerDetails.EntityDates;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -12,17 +13,20 @@ import java.time.LocalDateTime;
 public class SupplierMapper {
     public Supplier toEntity(SupplierRequestDTO dto) {
 
-        if (dto == null) return null;
+        if(dto == null) return null;
 
         Supplier supplier = new Supplier();
+        EntityDates entityDates = new EntityDates();
+        supplier.setEntityDates(entityDates);
 
-        supplier.getPersonDates().setName(dto.getName());
-        supplier.getPersonDates().setPhone(dto.getPhone());
+        supplier.getEntityDates().setName(dto.getName());
+        supplier.getEntityDates().setCnpjCpf(dto.getCnpjCpf());
+        supplier.getEntityDates().setPhone(dto.getPhoneNumber());
         supplier.setContactName(dto.getContactName());
-        supplier.getPersonDates().setEmail(dto.getEmail());
-        supplier.getPersonDates().setAddress(dto.getAddress());
-        supplier.getPersonDates().setCity(dto.getCity());
-        supplier.getPersonDates().setUf(dto.getUf());
+        supplier.getEntityDates().setEmail(dto.getEmail());
+        supplier.getEntityDates().setAddress(dto.getAddress());
+        supplier.getEntityDates().setCity(dto.getCity());
+        supplier.getEntityDates().setUf(dto.getUf());
         supplier.setRegisteredAt(LocalDateTime.now());
         supplier.setActive(true);
 
@@ -32,15 +36,16 @@ public class SupplierMapper {
     public Supplier updateFromDTO(SupplierUpdateDTO dto,
                                   Supplier supplier) {
 
-        if (dto == null) return null;
+        if(dto == null) return null;
 
-        if(dto.getName() != null) supplier.getPersonDates().setName(dto.getName());
-        if(dto.getPhone() != null) supplier.getPersonDates().setPhone(dto.getPhone());
+        if(dto.getName() != null) supplier.getEntityDates().setName(dto.getName());
+        if(dto.getCnpjCpf() != null) supplier.getEntityDates().setCnpjCpf(dto.getCnpjCpf());
+        if(dto.getPhoneNumber() != null) supplier.getEntityDates().setPhone(dto.getPhoneNumber());
         if(dto.getContactName() != null) supplier.setContactName(dto.getContactName());
-        if(dto.getEmail() != null) supplier.getPersonDates().setEmail(dto.getEmail());
-        if(dto.getAddress() != null) supplier.getPersonDates().setAddress(dto.getAddress());
-        if(dto.getCity() != null) supplier.getPersonDates().setCity(dto.getCity());
-        if(dto.getUf() != null) supplier.getPersonDates().setUf(dto.getUf());
+        if(dto.getEmail() != null) supplier.getEntityDates().setEmail(dto.getEmail());
+        if(dto.getAddress() != null) supplier.getEntityDates().setAddress(dto.getAddress());
+        if(dto.getCity() != null) supplier.getEntityDates().setCity(dto.getCity());
+        if(dto.getUf() != null) supplier.getEntityDates().setUf(dto.getUf());
         if(dto.getActive() != null) supplier.setActive(dto.getActive());
         supplier.setUpdatedAt(LocalDateTime.now());
 
@@ -51,13 +56,14 @@ public class SupplierMapper {
         SupplierResponseDTO dto = new SupplierResponseDTO();
 
         dto.setId(supplier.getId());
-        dto.setName(supplier.getPersonDates().getName());
-        dto.setPhone(supplier.getPersonDates().getPhone());
+        dto.setName(supplier.getEntityDates().getName());
+        dto.setCnpjCpf(supplier.getEntityDates().getCnpjCpf());
+        dto.setPhoneNumber(supplier.getEntityDates().getPhone());
         dto.setContactName(supplier.getContactName());
-        dto.setEmail(supplier.getPersonDates().getEmail());
-        dto.setAddress(supplier.getPersonDates().getAddress());
-        dto.setCity(supplier.getPersonDates().getCity());
-        dto.setUf(supplier.getPersonDates().getUf());
+        dto.setEmail(supplier.getEntityDates().getEmail());
+        dto.setAddress(supplier.getEntityDates().getAddress());
+        dto.setCity(supplier.getEntityDates().getCity());
+        dto.setUf(supplier.getEntityDates().getUf());
         dto.setActive(supplier.isActive());
         dto.setRegisteredAt(supplier.getRegisteredAt());
         dto.setUpdatedAt(supplier.getUpdatedAt());

@@ -1,6 +1,6 @@
 package com.geciara.orcamento.model.entitys;
 
-import com.geciara.orcamento.model.entitys.registerDetails.PersonDates;
+import com.geciara.orcamento.model.entitys.registerDetails.EntityDates;
 import com.geciara.orcamento.model.enums.EUserRole;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -38,7 +38,7 @@ public class User implements UserDetails {
 
     @Embedded
     @ToString.Exclude
-    private PersonDates personDates;
+    private EntityDates entityDates;
 
     @Column(nullable = false)
     private boolean active = true;
@@ -55,8 +55,8 @@ public class User implements UserDetails {
     public void onCreate() {
         registeredAt = LocalDateTime.now();
         updatedAt = LocalDateTime.now();
-        if (personDates == null) {
-            personDates = new PersonDates();
+        if (entityDates == null) {
+            entityDates = new EntityDates();
         }
     }
 

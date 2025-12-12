@@ -26,7 +26,7 @@ public class SupplierService {
 
 
     public SupplierResponseDTO save(SupplierRequestDTO dto) {
-        if (supplierRepository.existsByPersonDates_Name(dto.getName())) {
+        if (supplierRepository.existsByEntityDates_Name(dto.getName())) {
             throw new EmailAlreadyExistsException("Nome já está em uso.");
         }
 

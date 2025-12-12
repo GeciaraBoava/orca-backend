@@ -4,7 +4,7 @@ import com.geciara.orcamento.dto.UserRequestDTO;
 import com.geciara.orcamento.dto.UserResponseDTO;
 import com.geciara.orcamento.dto.UserUpdateRequestDTO;
 import com.geciara.orcamento.model.entitys.User;
-import com.geciara.orcamento.model.entitys.registerDetails.PersonDates;
+import com.geciara.orcamento.model.entitys.registerDetails.EntityDates;
 import com.geciara.orcamento.model.enums.EUserRole;
 import org.springframework.stereotype.Component;
 
@@ -17,14 +17,15 @@ public class UserMapper {
         user.setUsername(dto.getEmail());
         user.setRole(EUserRole.getRoleByProfile(dto.getRole()));
 
-        PersonDates personDates = new PersonDates();
-        personDates.setName(dto.getName());
-        personDates.setPhone(dto.getPhoneNumber());
-        personDates.setEmail(dto.getEmail());
-        personDates.setAddress(dto.getAddress());
-        personDates.setCity(dto.getCity());
-        personDates.setUf(dto.getUf());
-        user.setPersonDates(personDates);
+        EntityDates entityDates = new EntityDates();
+        entityDates.setName(dto.getName());
+        entityDates.setCnpjCpf(dto.getCnpjCpf());
+        entityDates.setPhone(dto.getPhoneNumber());
+        entityDates.setEmail(dto.getEmail());
+        entityDates.setAddress(dto.getAddress());
+        entityDates.setCity(dto.getCity());
+        entityDates.setUf(dto.getUf());
+        user.setEntityDates(entityDates);
 
         return user;
     }
@@ -34,13 +35,14 @@ public class UserMapper {
         dto.setId(user.getId());
         dto.setRole(user.getRole().getProfile());
 
-        if (user.getPersonDates() != null) {
-            dto.setName(user.getPersonDates().getName());
-            dto.setPhoneNumber(user.getPersonDates().getPhone());
-            dto.setEmail(user.getPersonDates().getEmail());
-            dto.setAddress(user.getPersonDates().getAddress());
-            dto.setCity(user.getPersonDates().getCity());
-            dto.setUf(user.getPersonDates().getUf());
+        if(user.getEntityDates() != null) {
+            dto.setName(user.getEntityDates().getName());
+            dto.setCnpjCpf(user.getEntityDates().getCnpjCpf());
+            dto.setPhoneNumber(user.getEntityDates().getPhone());
+            dto.setEmail(user.getEntityDates().getEmail());
+            dto.setAddress(user.getEntityDates().getAddress());
+            dto.setCity(user.getEntityDates().getCity());
+            dto.setUf(user.getEntityDates().getUf());
         }
 
         dto.setActive(user.isActive());
@@ -51,26 +53,27 @@ public class UserMapper {
     }
 
     public User updateFromDTO(UserUpdateRequestDTO dto, User user) {
-        if (dto.getRole() != null) user.setRole(EUserRole.getRoleByProfile(dto.getRole()));
+        if(dto.getRole() != null) user.setRole(EUserRole.getRoleByProfile(dto.getRole()));
 
         user.setActive(dto.isActive());
 
-            PersonDates personDates = user.getPersonDates();
-        if (personDates == null) {
-            personDates = new PersonDates();
-            user.setPersonDates(personDates);
+            EntityDates entityDates = user.getEntityDates();
+        if(entityDates == null) {
+            entityDates = new EntityDates();
+            user.setEntityDates(entityDates);
         }
 
-        if (dto.getName() != null) personDates.setName(dto.getName());
-        if (dto.getPhoneNumber() != null) personDates.setPhone(dto.getPhoneNumber());
-        if (dto.getEmail() != null) {
-            personDates.setEmail(dto.getEmail());
+        if(dto.getName() != null) entityDates.setName(dto.getName());
+        if(dto.getCnpjCpf() != null) entityDates.setCnpjCpf(dto.getCnpjCpf());
+        if(dto.getPhoneNumber() != null) entityDates.setPhone(dto.getPhoneNumber());
+        if(dto.getEmail() != null) {
+            entityDates.setEmail(dto.getEmail());
             // Atualiza username também (já que username = email)
             user.setUsername(dto.getEmail());
         }
-        if (dto.getAddress() != null) personDates.setAddress(dto.getAddress());
-        if (dto.getCity() != null) personDates.setCity(dto.getCity());
-        if (dto.getUf() != null) personDates.setUf(dto.getUf());
+        if(dto.getAddress() != null) entityDates.setAddress(dto.getAddress());
+        if(dto.getCity() != null) entityDates.setCity(dto.getCity());
+        if(dto.getUf() != null) entityDates.setUf(dto.getUf());
 
         return user;
     }

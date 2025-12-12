@@ -14,6 +14,8 @@ public class UserRequestDTO {
     @NotBlank(message = "Nome é obrigatório")
     private String name;
 
+    private String cnpjCpf;
+
     @NotBlank(message = "Telefone é obrigatório")
     private String phoneNumber;
 

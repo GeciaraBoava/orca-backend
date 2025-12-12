@@ -25,9 +25,9 @@ public enum EUserRole {
     }
 
     public static EUserRole getRoleByProfile(String profile) {
-        for (EUserRole role : EUserRole.values()) {
-            if (role.getProfile().equalsIgnoreCase(profile)) {
-                return role;
+        for (EUserRole e : EUserRole.values()) {
+            if (e.getProfile().equalsIgnoreCase(profile)) {
+                return e;
             }
         }
         return null;

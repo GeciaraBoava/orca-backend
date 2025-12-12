@@ -1,6 +1,6 @@
 package com.geciara.orcamento.model.entitys;
 
-import com.geciara.orcamento.model.entitys.registerDetails.PersonDates;
+import com.geciara.orcamento.model.entitys.registerDetails.EntityDates;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,7 +23,7 @@ public class Supplier {
     private Long id;
 
     @Embedded
-    private PersonDates personDates;
+    private EntityDates entityDates;
 
     @Column(nullable = false)
     private String contactName;
@@ -39,8 +39,8 @@ public class Supplier {
     public void onCreate() {
         registeredAt = LocalDateTime.now();
         updatedAt = LocalDateTime.now();
-        if (personDates == null) {
-            personDates = new PersonDates();
+        if (entityDates == null) {
+            entityDates = new EntityDates();
         }
     }
 

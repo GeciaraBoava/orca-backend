@@ -1,6 +1,5 @@
 package com.geciara.orcamento.dto;
 
-import com.geciara.orcamento.model.enums.ECustomerType;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -15,8 +14,11 @@ public class CustomerRequestDTO {
     @NotBlank(message = "Nome é obrigatório")
     private String name;
 
+    @NotBlank(message = "CNPJ é obrigatório")
+    private String cnpjCpf;
+
     @NotBlank(message = "Telefone é obrigatório")
-    private String phone;
+    private String phoneNumber;
 
     @NotBlank(message = "Nome de contato é obrigatório")
     private String contactName;
@@ -36,6 +38,6 @@ public class CustomerRequestDTO {
     private String uf;
 
     @NotNull(message = "Tipo de cliente é obrigatório")
-    private ECustomerType customerType;
+    private String customerType;
 
 }

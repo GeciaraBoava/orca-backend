@@ -8,6 +8,7 @@ public class UserUpdateRequestDTO {
     private String password;
     private String role;
     private String name;
+    private String cnpjCpf;
     private String phoneNumber;
     private String email;
     private String address;

@@ -8,10 +8,12 @@ import lombok.Setter;
 @Getter
 @Setter
 @Embeddable
-public class PersonDates {
+public class EntityDates {
 
     @Column(nullable = false)
     private String name;
+
+    private String cnpjCpf;
 
     @Column(nullable = false)
     private String phone;

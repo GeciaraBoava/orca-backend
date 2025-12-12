@@ -50,7 +50,7 @@ public class AuthController {
             var auth = this.authenticationManager.authenticate(usernamePassword);
             var token = tokenService.generateToken(body.username());
             var user = (User) auth.getPrincipal();
-            var name = user.getPersonDates().getName();
+            var name = user.getEntityDates().getName();
             var role = user.getRole().getProfile();
             var username = user.getUsername();
 

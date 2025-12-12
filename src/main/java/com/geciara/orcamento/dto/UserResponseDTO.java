@@ -11,8 +11,9 @@ public class UserResponseDTO {
     private Long id;
     private String role;
 
-    // Campos do PersonDates
+    // Campos do EntityDates
     private String name;
+    private String cnpjCpf;
     private String phoneNumber;
     private String email;
     private String address;

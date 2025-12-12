@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface SupplierRepository extends JpaRepository<Supplier, Long> {
-    boolean existsByPersonDates_Name(String name);
+    boolean existsByEntityDates_Name(String name);
 }
 
 
