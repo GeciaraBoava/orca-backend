@@ -1,7 +1,6 @@
 package com.geciara.orcamento.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -10,6 +9,7 @@ import java.time.LocalDateTime;
 public class MaterialTypeResponseDTO {
 
     private Long id;
+    private String name;
     private String description;
     private boolean active;
 

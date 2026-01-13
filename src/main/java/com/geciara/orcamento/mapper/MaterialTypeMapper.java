@@ -17,6 +17,7 @@ public class MaterialTypeMapper {
 
         MaterialType materialType = new MaterialType();
 
+        materialType.setName(dto.getName());
         materialType.setDescription(dto.getDescription());
         materialType.setActive(true);
         materialType.setRegisteredAt(LocalDateTime.now());
@@ -29,6 +30,7 @@ public class MaterialTypeMapper {
 
         if (dto == null) return null;
 
+        if(dto.getName() != null) materialType.setName(dto.getName());
         if(dto.getDescription() != null) materialType.setDescription(dto.getDescription());
         if(dto.getActive() != null) materialType.setActive(dto.getActive());
         materialType.setUpdatedAt(LocalDateTime.now());
@@ -40,6 +42,7 @@ public class MaterialTypeMapper {
         MaterialTypeResponseDTO dto = new MaterialTypeResponseDTO();
 
         dto.setId(materialType.getId());
+        dto.setName(materialType.getName());
         dto.setDescription(materialType.getDescription());
         dto.setActive(materialType.isActive());
         dto.setRegisteredAt(materialType.getRegisteredAt());

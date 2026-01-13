@@ -9,6 +9,7 @@ public class MaterialTypeUpdateDTO {
     @NotNull
     private Long id;
 
+    private String name;
     private String description;
     private Boolean active;
 }

@@ -22,7 +22,10 @@ public class UnitMeasure {
     @SequenceGenerator(name = "unit_measure_seq", sequenceName = "unit_measure_seq", allocationSize = 1)
     private Long id;
 
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false, length = 10)
+    private String name;
+
+    @Column(nullable = false)
     private String description;
 
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
@@ -35,6 +38,16 @@ public class UnitMeasure {
     @Column(nullable = false)
     private boolean active;
 
+    @PrePersist
+    public void prePersist() {
+        registeredAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
 
     public UnitMeasure(String description) {
         this.description = description;

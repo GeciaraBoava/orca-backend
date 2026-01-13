@@ -11,6 +11,7 @@ public class ItemTypeUpdateDTO {
     @NotNull
     private Long id;
 
+    private String name;
     private String description;
     private boolean active;
 

@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 
 @Getter
 @Setter
-public class ItemCompositionRequestDTO {
+public class ItemCompositionDTO {
     @NotNull
     private String description;
 

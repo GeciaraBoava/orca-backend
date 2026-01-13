@@ -2,7 +2,7 @@ package com.geciara.orcamento.controller;
 
 import com.geciara.orcamento.dto.UserRequestDTO;
 import com.geciara.orcamento.dto.UserResponseDTO;
-import com.geciara.orcamento.dto.UserUpdateRequestDTO;
+import com.geciara.orcamento.dto.UserUpdateDTO;
 import com.geciara.orcamento.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -63,7 +63,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserResponseDTO> update(@PathVariable Long id, @RequestBody @Valid UserUpdateRequestDTO entity) {
+    public ResponseEntity<UserResponseDTO> update(@PathVariable Long id, @RequestBody @Valid UserUpdateDTO entity) {
         UserResponseDTO updatedEntity = userService.update(id, entity);
         return ResponseEntity.ok(updatedEntity);
 

@@ -1,6 +1,6 @@
 package com.geciara.orcamento.service;
 
-import com.geciara.orcamento.dto.ItemCompositionRequestDTO;
+import com.geciara.orcamento.dto.ItemCompositionDTO;
 import com.geciara.orcamento.dto.MaterialCompositionResponseDTO;
 import com.geciara.orcamento.dto.MaterialCompositionUpdateDTO;
 import com.geciara.orcamento.exceptions.ItemNotFoundException;
@@ -32,7 +32,7 @@ public class MaterialCompositionService {
     }
 
     @Transactional
-    public MaterialCompositionResponseDTO save(ItemCompositionRequestDTO dto) {
+    public MaterialCompositionResponseDTO save(ItemCompositionDTO dto) {
         ItemComposition mc = mapper.toEntity(dto);
         setMaterialOrComposition(mc, dto);
 
@@ -79,7 +79,7 @@ public class MaterialCompositionService {
     // --------------------------
     // Métodos privados
     // --------------------------
-    private void setMaterialOrComposition(ItemComposition mc, ItemCompositionRequestDTO dto) {
+    private void setMaterialOrComposition(ItemComposition mc, ItemCompositionDTO dto) {
         if (dto.getType() == ETypeMaterialComposition.MATERIAL) {
             mc.setMaterial(materialService.findMaterialById(dto.getMaterialId()));
         } else if (dto.getType() == ETypeMaterialComposition.COMPOSITION) {

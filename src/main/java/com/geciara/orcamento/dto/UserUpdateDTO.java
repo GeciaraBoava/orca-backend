@@ -3,7 +3,7 @@ package com.geciara.orcamento.dto;
 import lombok.Data;
 
 @Data
-public class UserUpdateRequestDTO {
+public class UserUpdateDTO {
 
     private String password;
     private String role;

@@ -2,7 +2,7 @@ package com.geciara.orcamento.service;
 
 import com.geciara.orcamento.dto.CustomerRequestDTO;
 import com.geciara.orcamento.dto.CustomerResponseDTO;
-import com.geciara.orcamento.dto.CustomerUpdateRequestDTO;
+import com.geciara.orcamento.dto.CustomerUpdateDTO;
 import com.geciara.orcamento.exceptions.ItemNotFoundException;
 import com.geciara.orcamento.mapper.CustomerMapper;
 import com.geciara.orcamento.model.entitys.Customer;
@@ -53,7 +53,7 @@ public class CustomerService {
                 .orElseThrow(ItemNotFoundException::new);
     }
 
-    public CustomerResponseDTO update(Long id, CustomerUpdateRequestDTO dto) {
+    public CustomerResponseDTO update(Long id, CustomerUpdateDTO dto) {
         Customer customer = customerRepository.findById(id)
                 .orElseThrow(ItemNotFoundException::new);
         Customer updatedCustomer = customerMapper.updateFromDTO(dto, customer);

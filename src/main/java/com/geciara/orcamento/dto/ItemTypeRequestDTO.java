@@ -8,6 +8,9 @@ import lombok.Setter;
 @Setter
 public class ItemTypeRequestDTO {
 
+    @NotBlank(message = "Tipo de item é obrigatório")
+    private String name;
+
     @NotBlank(message = "Descrição é obrigatória")
     private String description;
 

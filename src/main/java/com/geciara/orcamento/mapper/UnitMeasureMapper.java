@@ -17,6 +17,7 @@ public class UnitMeasureMapper {
 
         UnitMeasure unitMeasure = new UnitMeasure();
 
+        unitMeasure.setName(dto.getName());
         unitMeasure.setDescription(dto.getDescription());
         unitMeasure.setActive(true);
         unitMeasure.setRegisteredAt(LocalDateTime.now());
@@ -29,6 +30,7 @@ public class UnitMeasureMapper {
 
         if (dto == null) return null;
 
+        if(dto.getName() != null) unitMeasure.setName(dto.getName());
         if(dto.getDescription() != null) unitMeasure.setDescription(dto.getDescription());
         if(dto.getActive() != null) unitMeasure.setActive(dto.getActive());
         unitMeasure.setUpdatedAt(LocalDateTime.now());
@@ -40,6 +42,7 @@ public class UnitMeasureMapper {
         UnitMeasureResponseDTO dto = new UnitMeasureResponseDTO();
 
         dto.setId(unitMeasure.getId());
+        dto.setName(unitMeasure.getName());
         dto.setDescription(unitMeasure.getDescription());
         dto.setActive(unitMeasure.isActive());
         dto.setRegisteredAt(unitMeasure.getRegisteredAt());

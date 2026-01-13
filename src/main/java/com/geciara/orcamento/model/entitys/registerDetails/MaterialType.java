@@ -1,5 +1,6 @@
 package com.geciara.orcamento.model.entitys.registerDetails;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,13 +23,19 @@ public class MaterialType {
     private Long id;
 
     @Column(unique = true, nullable = false, length = 50)
+    private String name;
+
+    @Column(unique = true, nullable = false)
     private String description;
 
     @Column(nullable = false)
     private boolean active;
 
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     @Column(nullable = false, updatable = false)
     private LocalDateTime registeredAt;
+
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     private LocalDateTime updatedAt;
 
     @PrePersist

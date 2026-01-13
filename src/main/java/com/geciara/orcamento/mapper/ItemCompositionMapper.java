@@ -1,6 +1,6 @@
 package com.geciara.orcamento.mapper;
 
-import com.geciara.orcamento.dto.ItemCompositionRequestDTO;
+import com.geciara.orcamento.dto.ItemCompositionDTO;
 import com.geciara.orcamento.dto.MaterialCompositionResponseDTO;
 import com.geciara.orcamento.dto.MaterialCompositionUpdateDTO;
 import com.geciara.orcamento.model.entitys.ItemComposition;
@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @Component
 public class ItemCompositionMapper {
 
-    public ItemComposition toEntity(ItemCompositionRequestDTO dto) {
+    public ItemComposition toEntity(ItemCompositionDTO dto) {
         ItemComposition item = new ItemComposition();
         item.setDescription(dto.getDescription());
         item.setType(dto.getType());

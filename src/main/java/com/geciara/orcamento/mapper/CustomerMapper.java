@@ -2,7 +2,7 @@ package com.geciara.orcamento.mapper;
 
 import com.geciara.orcamento.dto.CustomerRequestDTO;
 import com.geciara.orcamento.dto.CustomerResponseDTO;
-import com.geciara.orcamento.dto.CustomerUpdateRequestDTO;
+import com.geciara.orcamento.dto.CustomerUpdateDTO;
 import com.geciara.orcamento.model.entitys.Customer;
 import com.geciara.orcamento.model.entitys.registerDetails.EntityDates;
 import com.geciara.orcamento.model.enums.ECustomerType;
@@ -36,7 +36,7 @@ public class CustomerMapper {
         return customer;
     }
 
-    public Customer updateFromDTO(CustomerUpdateRequestDTO dto,
+    public Customer updateFromDTO(CustomerUpdateDTO dto,
                                   Customer customer) {
 
         if (dto == null) return null;

@@ -17,6 +17,7 @@ public class ItemTypeMapper {
 
         ItemType itemType = new ItemType();
 
+        itemType.setName(dto.getName());
         itemType.setDescription(dto.getDescription());
         itemType.setActive(true);
         itemType.setRegisteredAt(LocalDateTime.now());
@@ -31,6 +32,7 @@ public class ItemTypeMapper {
     ) {
         if (dto == null || itemType == null) return null;
 
+        itemType.setName(dto.getName());
         itemType.setDescription(dto.getDescription());
         itemType.setActive(dto.isActive());
         itemType.setUpdatedAt(LocalDateTime.now());
@@ -43,6 +45,7 @@ public class ItemTypeMapper {
 
         ItemTypeResponseDTO dto = new ItemTypeResponseDTO();
         dto.setId(entity.getId());
+        dto.setName(entity.getName());
         dto.setDescription(entity.getDescription());
         dto.setActive(entity.isActive());
         dto.setRegisteredAt(entity.getRegisteredAt());

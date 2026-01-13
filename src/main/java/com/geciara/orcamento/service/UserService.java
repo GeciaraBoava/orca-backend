@@ -3,7 +3,7 @@ package com.geciara.orcamento.service;
 import com.geciara.orcamento.config.security.TokenService;
 import com.geciara.orcamento.dto.UserRequestDTO;
 import com.geciara.orcamento.dto.UserResponseDTO;
-import com.geciara.orcamento.dto.UserUpdateRequestDTO;
+import com.geciara.orcamento.dto.UserUpdateDTO;
 import com.geciara.orcamento.exceptions.EmailAlreadyExistsException;
 import com.geciara.orcamento.exceptions.ItemNotFoundException;
 import com.geciara.orcamento.exceptions.UserNotFoundException;
@@ -77,7 +77,7 @@ public class UserService {
     }
 
     @Transactional
-    public UserResponseDTO update(Long id, UserUpdateRequestDTO dto) {
+    public UserResponseDTO update(Long id, UserUpdateDTO dto) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("Usuário não encontrado."));
 

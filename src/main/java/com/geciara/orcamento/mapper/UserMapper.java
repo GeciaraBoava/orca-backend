@@ -2,7 +2,7 @@ package com.geciara.orcamento.mapper;
 
 import com.geciara.orcamento.dto.UserRequestDTO;
 import com.geciara.orcamento.dto.UserResponseDTO;
-import com.geciara.orcamento.dto.UserUpdateRequestDTO;
+import com.geciara.orcamento.dto.UserUpdateDTO;
 import com.geciara.orcamento.model.entitys.User;
 import com.geciara.orcamento.model.entitys.registerDetails.EntityDates;
 import com.geciara.orcamento.model.enums.EUserRole;
@@ -52,7 +52,7 @@ public class UserMapper {
         return dto;
     }
 
-    public User updateFromDTO(UserUpdateRequestDTO dto, User user) {
+    public User updateFromDTO(UserUpdateDTO dto, User user) {
         if(dto.getRole() != null) user.setRole(EUserRole.getRoleByProfile(dto.getRole()));
 
         user.setActive(dto.isActive());

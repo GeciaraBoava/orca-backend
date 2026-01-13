@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
-public class CustomerUpdateRequestDTO {
+public class CustomerUpdateDTO {
 
     private String name;
     private String cnpjCpf;
