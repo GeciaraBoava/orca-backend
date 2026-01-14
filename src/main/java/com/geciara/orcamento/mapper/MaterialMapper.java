@@ -109,9 +109,11 @@ public class MaterialMapper {
 
         MaterialType materialType = material.getMaterialType();
         dto.setMaterialTypeDescription(materialType.getDescription());
+        dto.setMaterialTypeId(materialType.getId());
 
         UnitMeasure unitMeasure = material.getUnitMeasure();
         dto.setUnitMeasureDescription(unitMeasure.getDescription());
+        dto.setUnitMeasureId(unitMeasure.getId());
 
         return dto;
     }
